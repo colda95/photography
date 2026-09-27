@@ -22,7 +22,7 @@ WATER_LABELS = [('Colorado', 38.62, -109.30, 'start', 0), ('Lake Powell', 37.45,
                 ('Lake Mead', 35.93, -114.28, 'middle', 0), ('San Juan', 37.30, -109.30, 'middle', 0),
                 ('Green', 38.80, -110.05, 'end', 0), ('Virgin', 36.90, -113.72, 'start', 0),
                 ('Little Colorado', 35.72, -111.30, 'middle', 0)]
-REGION_LABELS = [('ALTOPIANO DEL COLORADO', 38.82, -113.0, 'region'), ('GREAT BASIN', 37.75, -115.35, 'region'),
+REGION_LABELS = [('GREAT BASIN', 37.75, -115.35, 'region'),
                  ('La Sal Mountains', 38.33, -109.23, 'relief'), ('Henry Mountains', 38.05, -110.80, 'relief'),
                  ('Kaibab Plateau', 36.45, -112.18, 'relief'),
                  ('Aquarius Plateau', 38.02, -111.55, 'relief'), ('Navajo Mountain', 37.03, -110.87, 'relief')]
@@ -77,12 +77,13 @@ def _pill(x, y, num, s):
             f'<text x="{x:.1f}" y="{y+3.6*s:.1f}" class="map-num" text-anchor="middle" style="font-size:{10*s:.1f}px">{num}</text>')
 
 
-def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False):
+def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False, quota_href="../assets/quota-usa.png"):
     """Mappa del percorso. mobile=True: versione per schermi stretti, con segni più grandi e senza nomi delle tappe."""
     t = titles or {}
     s = 2.6 if mobile else 1.0
     shift = SHIFT[mobile]
-    o = [f'<svg class="map {"map-mobile" if mobile else "map-desktop"}" viewBox="0 0 {W} {H}" role="img" aria-label="Mappa del percorso tra Nevada, Arizona e Utah, con le tappe numerate come i capitoli">']
+    o = [f'<svg class="map {"map-mobile" if mobile else "map-desktop"}" viewBox="{PAD} {PAD} {W-2*PAD} {H-2*PAD}" role="img" aria-label="Mappa del percorso tra Nevada, Arizona e Utah, con le tappe numerate come i capitoli">']
+    o.append(f'<rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" class="map-land"/>')
     if not mobile:
         for lon in range(-116, -108):
             o.append(f'<text x="{X(lon)+4:.1f}" y="{H-PAD-6}" class="map-deg">{abs(lon)}° W</text>')
@@ -93,10 +94,15 @@ def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False):
     for lat in range(35, 40):
         o.append(f'<line x1="{PAD}" y1="{Y(lat):.1f}" x2="{W-PAD}" y2="{Y(lat):.1f}" class="map-grid"/>')
     o.append(f'<rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" class="map-frame"/>')
-    cid = 'map-clip-m' if mobile else 'map-clip'
-    o.append(f'<defs><clipPath id="{cid}"><rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}"/></clipPath></defs>')
+    sfx = '-m' if mobile else ''
+    cid = 'map-clip' + sfx
+    # i livelli raster sono maschere: il colore arriva dal foglio di stile (tema chiaro/scuro) tramite questi filtri
+    tint = lambda name: (f'<filter id="map-f-{name}{sfx}" color-interpolation-filters="sRGB"><feFlood class="map-flood-{name}"/>'
+                         f'<feComposite in2="SourceAlpha" operator="in"/></filter>')
+    o.append(f'<defs><clipPath id="{cid}"><rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}"/></clipPath>{tint("high")}{tint("shade")}</defs>')
     o.append(f'<g clip-path="url(#{cid})">')
-    o.append(f'<image href="{relief_href}" x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" preserveAspectRatio="none" class="map-hill"/>')
+    o.append(f'<image href="{quota_href}" x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" preserveAspectRatio="none" class="map-high" filter="url(#map-f-high{sfx})"/>')
+    o.append(f'<image href="{relief_href}" x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" preserveAspectRatio="none" class="map-hill" filter="url(#map-f-shade{sfx})"/>')
     for b in DATA['borders']:
         o.append(f'<path class="map-border" style="stroke-width:{1.2*s:.1f}" d="{_path(b)}"/>')
     for lake in DATA['lakes']:
@@ -112,11 +118,6 @@ def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False):
     if not mobile:
         for name, la, lo, kind in REGION_LABELS:
             o.append(f'<text x="{X(lo):.1f}" y="{Y(la):.1f}" class="map-{kind}" text-anchor="middle">{name}</text>')
-        for pk in DATA['peaks']:
-            lo, la = pk['pt']; x, y = X(lo), Y(la)
-            label, dx, dy, anc = PEAK_NAMES.get(pk['name'], (pk['name'], 12, 4, 'start'))
-            o.append(f'<path d="M{x-6:.1f},{y+5:.1f} L{x:.1f},{y-6:.1f} L{x+6:.1f},{y+5:.1f} Z" class="map-peak"/>'
-                     f'<text x="{x+dx:.1f}" y="{y+dy:.1f}" class="map-small" text-anchor="{anc}">{label} · {pk["elev"]} m</text>')
         for name, la, lo, anc, _ in WATER_LABELS:
             o.append(f'<text x="{X(lo):.1f}" y="{Y(la):.1f}" class="map-water" text-anchor="{anc}">{name}</text>')
         o.append(f'<circle cx="{X(-109.045):.1f}" cy="{Y(37.0):.1f}" r="3" class="map-fc"/>'

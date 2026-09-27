@@ -173,7 +173,7 @@ def build():
 '''
     ver = hashlib.md5(open(f'{ROOT}/assets/style.css','rb').read() + open(f'{ROOT}/assets/album.js','rb').read()).hexdigest()[:8]
     album = head(f'{ALBUM["title"]} · {AUTHOR}', ALBUM.get('meta_description') or ALBUM['lede'], f'../assets/style.css?v={ver}', f'{slug}/') + f'''<header class="hero">
-  <nav class="topbar" aria-label="Navigazione"><a href="../">{AUTHOR}</a><a href="../">Tutti gli album</a></nav>
+  <nav class="topbar" aria-label="Navigazione"><a href="../">{AUTHOR}</a></nav>
   <img src="../{PAGE_DIR}/{hero}.jpg" alt="La US-163 verso Monument Valley all’ultima luce" fetchpriority="high">
   <div class="hero-text">
     <h1>Terra<br>rossa</h1>
@@ -185,8 +185,6 @@ def build():
     <figure class="route-map">
       <div class="map-head"><p class="kicker"><span>Il percorso</span></p><h2 class="map-title">Nove tappe, tre stati</h2></div>
       {mappa.svg()}{mappa.svg(mobile=True)}
-      {mappa.legenda()}
-      <figcaption class="map-note">Linea indicativa tra le tappe; posizioni dalle coordinate delle foto. Tocca un numero per andare al capitolo. Fiumi, laghi e confini: Natural Earth. Rilievo: NASA SRTM, tramite OpenTopography.</figcaption>
     </figure>
   </section>
 {chapters_html}
@@ -197,6 +195,7 @@ def build():
       <div><dt>Fotocamera</dt><dd>Canon EOS R7</dd></div>
       <div><dt>Obiettivi</dt><dd>{lens_html}</dd></div>
       <div><dt>Sviluppo</dt><dd>Adobe Lightroom</dd></div>
+      <div><dt>Mappa</dt><dd>Fiumi, laghi e confini: Natural Earth<br>Rilievo: NASA SRTM, tramite OpenTopography</dd></div>
     </dl>
     {"".join(f'<p class="copy">{esc(x)}</p>' for x in ALBUM.get('footer_copy') or [f'© {year} {AUTHOR}. Tutti i diritti riservati.'])}
     <p class="copy"><a class="backlink" href="../">← Tutti gli album</a></p>

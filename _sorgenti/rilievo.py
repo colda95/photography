@@ -30,3 +30,12 @@ alpha = alpha.point(lambda v: (v // 8) * 8)       # 32 livelli: file molto più 
 out = Image.new('RGBA', (Wo, Ho), (0, 0, 0, 0)); out.putalpha(alpha)
 out.quantize(colors=32, method=Image.Quantize.FASTOCTREE).save(os.path.join(os.path.dirname(HERE), 'assets', 'rilievo-usa.png'), optimize=True)
 print('Scritto assets/rilievo-usa.png', Wo, Ho)
+
+# Strato delle quote alte (sopra i 1900 m circa), usato per la tinta verde-grigia delle montagne
+from PIL import ImageFilter
+e = np.asarray(Image.fromarray(z, 'F').resize((Wo // 2, Ho // 2), Image.BILINEAR))
+hi = np.clip((e - 1900) / 900, 0, 1) ** 0.9
+q = Image.fromarray((hi * 255).astype(np.uint8), 'L').filter(ImageFilter.GaussianBlur(1.5)).point(lambda v: (v // 16) * 16)
+qo = Image.new('RGBA', q.size, (0, 0, 0, 0)); qo.putalpha(q)
+qo.quantize(colors=16, method=Image.Quantize.FASTOCTREE).save(os.path.join(os.path.dirname(HERE), 'assets', 'quota-usa.png'), optimize=True)
+print('Scritto assets/quota-usa.png')
