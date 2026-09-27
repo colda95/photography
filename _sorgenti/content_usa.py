@@ -72,7 +72,7 @@ dict(num='IV', date='7–8 aprile 2026', title='Monticello',
  intro='Una notte in una cupola vicino a Monticello, sotto un cielo pieno di stelle, e un risveglio presto, con il teleobiettivo pronto per chi abita il bosco di ginepri.',
  blocks=[
   ('offset', ('20260408-3W9A7399', 'Alba.', 'Alle 6:58 la prima luce tocca solo la casa bianca, in mezzo a un mare di ginepri ancora in ombra.'),
-             ('20260407-3W9A7388', 'Notte.', 'Alle 22:32, lontano dalle città, il cielo si riempie di stelle sopra i ginepri.'), False),
+             ('20260407-3W9A7388', 'Notte.', 'Alle 22:32, lontano dalle città, il cielo si riempie di stelle sopra i ginepri.'), True),
   ('wide', ('20260408-3W9A7575', 'Cervo mulo.', 'Nel primo mattino, tra i cespugli, un cervo mulo si ferma a guardare prima di sparire nel bosco.')),
  ]),
 
@@ -94,9 +94,6 @@ dict(num='V', date='8 aprile 2026', title='Arches',
   ('group', [
    ('20260408-3W9A7628', 'Sotto l’arco.', 'Un ponte di roccia visto da sotto, sospeso nel blu.'),
    ('20260408-3W9A7636', 'Le pinne.', 'Lastre verticali di arenaria, le “fin”, da cui nel tempo nascono gli archi.')]),
-  ('group', [
-   ('20260408-3W9A7643', 'Archi nascosti.', 'Non tutti gli archi sono famosi: molti compaiono all’improvviso lungo i sentieri.'),
-   ('20260408-3W9A7644', 'Una finestra.', 'Una piccola apertura in una parete: un arco che sta ancora nascendo.')]),
   ('wide', ('20260408-3W9A7647', 'Vista sul parco.', 'Dall’alto, il parco si apre in un mosaico di rocce chiare, rosse e cespugli.')),
   ('wide', ('20260408-3W9A7649', 'Delicate Arch.', 'Il simbolo dello Utah, piccolo sull’orizzonte di roccia liscia.')),
   ('group', [
@@ -162,3 +159,24 @@ dict(num='IX', date='11 aprile 2026', title='Verso Las Vegas',
   ('wide', ('20260411-3W9A8771', 'Welcome to Fabulous Las Vegas.', 'Alle 18:17, il cartello del 1959 che segna l’arrivo in città. Fine del viaggio. Forse.')),
  ]),
 ]
+
+
+# Coordinate corrette a mano (lat, lon), o None per non mostrarle.
+# Le foto di Arches erano tutte geotaggate sullo stesso punto: qui ci sono le posizioni dei luoghi fotografati.
+GPS = {
+    '20260407-3W9A7333-HDR': (37.10264, -109.98919),  # Forrest Gump Point, US-163
+    '20260407-3W9A7364-HDR': (37.10264, -109.98919),
+    '20260408-3W9A7595': (38.63167, -109.60222),      # Park Avenue
+    '20260408-3W9A7600': (38.62776, -109.60290),      # Queen Nefertiti Rock
+    '20260408-3W9A7604': (38.66166, -109.58825),      # Petrified Dunes Viewpoint
+    '20260408-3W9A7608': None,                        # lucertola: luogo non riconoscibile
+    '20260408-3W9A7610': (38.70130, -109.56450),      # Balanced Rock
+    '20260408-3W9A7622': (38.70130, -109.56450),
+    '20260408-3W9A7624': (38.70130, -109.56450),      # dai pressi di Balanced Rock
+    '20260408-3W9A7626': None,                        # Windows Road: punto preciso non riconoscibile
+    '20260408-3W9A7627': (38.68436, -109.53496),      # Turret Arch, The Windows
+    '20260408-3W9A7628': (38.68436, -109.53496),      # North Window, The Windows
+    '20260408-3W9A7636': None,                        # pinne: punto preciso non riconoscibile
+    '20260408-3W9A7647': None,                        # Salt Valley: punto preciso non verificato
+    '20260408-3W9A7649': (38.74352, -109.49934),      # Delicate Arch (l'arco, visto dal belvedere)
+}

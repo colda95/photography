@@ -14,6 +14,10 @@ AUTHOR = 'Dario Coluzzi'
 SITE_TITLE = 'Dario Coluzzi'
 sys.path.insert(0, HERE)
 from content_usa import ALBUM, CHAPTERS
+try:
+    from content_usa import GPS as GPS_FIX
+except ImportError:
+    GPS_FIX = {}
 # Testi modificati a mano nella pagina pubblicata: hanno la precedenza sul contenuto di partenza.
 _T = os.path.join(HERE, 'testi_utente.json')
 if os.path.exists(_T):
@@ -97,11 +101,11 @@ def build():
         n[0] += 1; m = meta[name]
         MESI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic']
         parts = []
-        if not opt.get('notime') and m['date']:
-            y, mo, d = m['date'].split(':')
-            parts.append(f'<i>{int(d)} {MESI[int(mo)-1]} {y}</i> · <i>{m["time"]}</i>')
-        if m['gps']:
-            la, lo = m['gps']
+        if not opt.get('notime') and m['time']:
+            parts.append(f'<i>{m["time"]}</i>')
+        gps = GPS_FIX[name] if name in GPS_FIX else m['gps']
+        if gps:
+            la, lo = gps
             txt = f'{abs(la):.4f}° {"N" if la >= 0 else "S"}, {abs(lo):.4f}° {"E" if lo >= 0 else "W"}'
             parts.append(f'<a href="https://www.openstreetmap.org/?mlat={la:.5f}&amp;mlon={lo:.5f}#map=13/{la:.5f}/{lo:.5f}" target="_blank" rel="noopener" title="Apri sulla mappa"><i>{txt}</i></a>')
         where = f'<span class="where">{" · ".join(parts)}</span>' if parts else ''
@@ -119,8 +123,10 @@ def build():
                 fig(p, sizes=f'(max-width: 760px) 100vw, {round(100 * (meta[p[0]]["w"]/meta[p[0]]["h"]) / tot)}vw') for p in b[1]) + '</div>'
         if k == 'offset':
             main, side, rev = b[1], b[2], b[3]
-            return (f'<div class="grid-offset{" rev" if rev else ""}">' + fig(main, 'span-main', '(max-width: 760px) 100vw, 66vw')
-                    + fig(side, 'side', '(max-width: 760px) 100vw, 33vw') + '</div>')
+            # con rev la foto laterale sta a sinistra: viene prima anche nell'ordine di lettura e nella numerazione
+            figs = [(main, 'span-main', '(max-width: 760px) 100vw, 66vw'), (side, 'side', '(max-width: 760px) 100vw, 33vw')]
+            if rev: figs.reverse()
+            return f'<div class="grid-offset{" rev" if rev else ""}">' + ''.join(fig(*f) for f in figs) + '</div>'
         raise ValueError(k)
 
     chapters_html = ''
