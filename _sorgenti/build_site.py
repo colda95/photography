@@ -15,6 +15,7 @@ SITE_TITLE = 'Dario Coluzzi'
 SITE_URL = 'https://colda95.github.io/photography/'
 sys.path.insert(0, HERE)
 from content_usa import ALBUM, CHAPTERS
+import mappa
 try:
     from content_usa import GPS as GPS_FIX
 except ImportError:
@@ -176,13 +177,17 @@ def build():
   <img src="../{PAGE_DIR}/{hero}.jpg" alt="La US-163 verso Monument Valley all’ultima luce" fetchpriority="high">
   <div class="hero-text">
     <h1>Terra<br>rossa</h1>
-    <p class="kicker light"><span>{ALBUM["kicker"][0]}</span><span>{ALBUM["kicker"][1]}</span></p>
   </div>
 </header>
 <main>
   <section class="opening">
     <p class="lede">{esc(ALBUM["lede"])}</p>
-    <ol class="route">{route}</ol>
+    <figure class="route-map">
+      <div class="map-head"><p class="kicker"><span>Il percorso</span></p><h2 class="map-title">Nove tappe, tre stati</h2></div>
+      {mappa.svg()}{mappa.svg(mobile=True)}
+      {mappa.legenda()}
+      <figcaption class="map-note">Linea indicativa tra le tappe; posizioni dalle coordinate delle foto. Tocca un numero per andare al capitolo. Fiumi, laghi, confini e rilievo: Natural Earth.</figcaption>
+    </figure>
   </section>
 {chapters_html}
   <footer class="colophon">

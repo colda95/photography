@@ -8,6 +8,7 @@ Questa cartella contiene gli script che generano le pagine del sito. Non viene p
 - `testi_utente.json` — i testi attuali (didascalie, introduzioni, titoli), comprese tutte le correzioni fatte a mano. Hanno la precedenza su `content_usa.py`.
 - `importa_testi.py` — rilegge i testi da `usa-2026/index.html` e aggiorna `testi_utente.json`.
 - `build_site.py` — rigenera le due pagine HTML.
+- `mappa.py` e `mappa_dati.json` — disegnano la mappa del percorso. Fiumi, laghi, confini e vette vengono da Natural Earth (pubblico dominio); il rilievo ombreggiato è in `assets/rilievo-usa.png`, ricavato dal Natural Earth Shaded Relief.
 
 ## Come si usa
 
