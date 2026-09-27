@@ -12,6 +12,7 @@ SRC = os.path.join(ROOT, REPO_DIR)
 OUT = os.environ.get('OUT', ROOT)              # dove scrivere le pagine (di default: il repository)
 AUTHOR = 'Dario Coluzzi'
 SITE_TITLE = 'Dario Coluzzi'
+SITE_URL = 'https://colda95.github.io/photography/'
 sys.path.insert(0, HERE)
 from content_usa import ALBUM, CHAPTERS
 try:
@@ -146,7 +147,7 @@ def build():
     total = n[0]
     hero = ALBUM['hero']
 
-    head = lambda title, desc, css: f'''<!doctype html>
+    head = lambda title, desc, css, path='': f'''<!doctype html>
 <html lang="it">
 <head>
 <meta charset="utf-8">
@@ -158,17 +159,24 @@ def build():
 <meta name="robots" content="noai, noimageai">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="{SITE_URL}{path}">
+<meta property="og:image" content="{SITE_URL}assets/og-terra-rossa.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="{css}">
 </head>
 <body>
 '''
     ver = hashlib.md5(open(f'{ROOT}/assets/style.css','rb').read() + open(f'{ROOT}/assets/album.js','rb').read()).hexdigest()[:8]
-    album = head(f'{ALBUM["title"]} · {AUTHOR}', ALBUM.get('meta_description') or ALBUM['lede'], f'../assets/style.css?v={ver}') + f'''<header class="hero">
+    album = head(f'{ALBUM["title"]} · {AUTHOR}', ALBUM.get('meta_description') or ALBUM['lede'], f'../assets/style.css?v={ver}', f'{slug}/') + f'''<header class="hero">
   <nav class="topbar" aria-label="Navigazione"><a href="../">{AUTHOR}</a><a href="../">Tutti gli album</a></nav>
   <img src="../{PAGE_DIR}/{hero}.jpg" alt="La US-163 verso Monument Valley all’ultima luce" fetchpriority="high">
   <div class="hero-text">
-    <p class="kicker light"><span>{ALBUM["kicker"][0]}</span><span>{ALBUM["kicker"][1]}</span></p>
     <h1>Terra<br>rossa</h1>
+    <p class="kicker light"><span>{ALBUM["kicker"][0]}</span><span>{ALBUM["kicker"][1]}</span></p>
   </div>
 </header>
 <main>
