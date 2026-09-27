@@ -186,7 +186,7 @@ def build():
       <div class="map-head"><p class="kicker"><span>Il percorso</span></p><h2 class="map-title">Nove tappe, tre stati</h2></div>
       {mappa.svg()}{mappa.svg(mobile=True)}
       {mappa.legenda()}
-      <figcaption class="map-note">Linea indicativa tra le tappe; posizioni dalle coordinate delle foto. Tocca un numero per andare al capitolo. Fiumi, laghi, confini e rilievo: Natural Earth.</figcaption>
+      <figcaption class="map-note">Linea indicativa tra le tappe; posizioni dalle coordinate delle foto. Tocca un numero per andare al capitolo. Fiumi, laghi e confini: Natural Earth. Rilievo: NASA SRTM, tramite OpenTopography.</figcaption>
     </figure>
   </section>
 {chapters_html}
