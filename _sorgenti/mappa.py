@@ -77,12 +77,18 @@ def _pill(x, y, num, s):
             f'<text x="{x:.1f}" y="{y+3.6*s:.1f}" class="map-num" text-anchor="middle" style="font-size:{10*s:.1f}px">{num}</text>')
 
 
-def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False, quota_href="../assets/quota-usa.png"):
+MAP_TEXT = {
+    'it': ('Mappa del percorso tra Nevada, Arizona e Utah, con le tappe numerate come i capitoli', 'Vai al capitolo'),
+    'en': ('Map of the route through Nevada, Arizona and Utah, with the stops numbered like the chapters', 'Go to chapter'),
+}
+
+
+def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False, quota_href="../assets/quota-usa.png", lang='it'):
     """Mappa del percorso. mobile=True: versione per schermi stretti, con segni più grandi e senza nomi delle tappe."""
     t = titles or {}
     s = 2.6 if mobile else 1.0
     shift = SHIFT[mobile]
-    o = [f'<svg class="map {"map-mobile" if mobile else "map-desktop"}" viewBox="{PAD} {PAD} {W-2*PAD} {H-2*PAD}" role="img" aria-label="Mappa del percorso tra Nevada, Arizona e Utah, con le tappe numerate come i capitoli">']
+    o = [f'<svg class="map {"map-mobile" if mobile else "map-desktop"}" viewBox="{PAD} {PAD} {W-2*PAD} {H-2*PAD}" role="img" aria-label="{MAP_TEXT[lang][0]}">']
     o.append(f'<rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" class="map-land"/>')
     if not mobile:
         for lon in range(-116, -108):
@@ -137,7 +143,7 @@ def svg(titles=None, relief_href="../assets/rilievo-usa.png", mobile=False, quot
         x, y = pos[(la, lo)]
         name = t.get(num, name)
         if num:
-            o.append(f'<a href="#cap-{num.lower()}" class="map-link"><title>Vai al capitolo {num}: {name}</title>' + _pill(x, y, num, s)
+            o.append(f'<a href="#cap-{num.lower()}" class="map-link"><title>{MAP_TEXT[lang][1]} {num}: {name}</title>' + _pill(x, y, num, s)
                      + ('' if mobile else f'<text x="{x+dx+(6 if anc=="start" else -6 if anc=="end" else 0):.1f}" y="{y+dy-4:.1f}" class="map-lab" text-anchor="{anc}">{name}</text>') + '</a>')
         else:
             q = 8 * s

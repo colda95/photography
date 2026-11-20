@@ -6,8 +6,15 @@ Questa cartella contiene gli script che generano le pagine del sito. Non viene p
 
 - `content_usa.py` — struttura dell'album: capitoli, ordine delle foto, impaginazione (foto larga, coppie, affiancate) e testi di partenza.
 - `testi_utente.json` — i testi attuali (didascalie, introduzioni, titoli), comprese tutte le correzioni fatte a mano. Hanno la precedenza su `content_usa.py`.
-- `importa_testi.py` — rilegge i testi da `usa-2026/index.html` e aggiorna `testi_utente.json`.
-- `build_site.py` — rigenera le due pagine HTML.
+- `testi_en.json` — la versione inglese degli stessi testi (stesse chiavi, stessi nomi di foto), più titolo dell'album, date dei capitoli e testi alternativi delle immagini. Quando cambi un testo italiano, aggiorna anche quello inglese: se una didascalia manca, la build lo segnala e usa l'italiano.
+- `importa_testi.py` — rilegge i testi da `usa-2026/index.html` e aggiorna `testi_utente.json`. Con `en` (`python3 _sorgenti/importa_testi.py en`) fa lo stesso per `en/usa-2026/index.html` e `testi_en.json`.
+- `build_site.py` — rigenera le pagine HTML in tutte e due le lingue. I testi fissi dell'interfaccia (pulsanti, colophon, copertina) sono nel dizionario `UI` all'inizio del file.
+
+## Lingue
+
+- Italiano: `index.html` e `usa-2026/`. Inglese: `en/index.html` e `en/usa-2026/`. Le foto e gli `assets` sono in comune.
+- In alto a destra c'è il selettore IT / EN; la scelta resta salvata nel browser del visitatore.
+- Chi apre una pagina italiana senza aver mai scelto e con un browser che non ha l'italiano tra le lingue preferite viene portato alla versione inglese. I motori di ricerca non vengono reindirizzati: trovano le due versioni tramite i link `hreflang`.
 - `mappa.py` e `mappa_dati.json` — disegnano la mappa del percorso. Fiumi, laghi, confini e vette vengono da Natural Earth (pubblico dominio); il rilievo ombreggiato è in `assets/rilievo-usa.png`, calcolato con `rilievo.py` dal modello del terreno NASA SRTM a 90 m (scaricato da OpenTopography; il file .tif non va messo su GitHub, è escluso dal `.gitignore`).
 
 ## Come si usa

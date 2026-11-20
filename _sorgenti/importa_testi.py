@@ -1,18 +1,20 @@
 """Legge i testi dalla pagina pubblicata (usa-2026/index.html) e li salva in testi_utente.json.
 Da lanciare PRIMA di build_site.py se hai corretto i testi direttamente nell'HTML,
-così la rigenerazione non li perde.  Uso:  python3 _sorgenti/importa_testi.py"""
-import html, json, os, re
+così la rigenerazione non li perde.  Uso:  python3 _sorgenti/importa_testi.py
+Per la versione inglese (en/usa-2026/index.html -> testi_en.json):  python3 _sorgenti/importa_testi.py en"""
+import html, json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PAGE = os.path.join(os.path.dirname(HERE), 'usa-2026', 'index.html')
-T = os.path.join(HERE, 'testi_utente.json')
+EN = len(sys.argv) > 1 and sys.argv[1] == 'en'
+PAGE = os.path.join(os.path.dirname(HERE), *(['en'] if EN else []), 'usa-2026', 'index.html')
+T = os.path.join(HERE, 'testi_en.json' if EN else 'testi_utente.json')
 
 s = open(PAGE, encoding='utf-8').read()
 u = lambda x: html.unescape(re.sub(r'<[^>]+>', '', x)).strip()
 j = json.load(open(T, encoding='utf-8')) if os.path.exists(T) else {}
 
 caps = {}
-for fig in re.findall(r'<figure.*?</figure>', s, re.S):
+for fig in re.findall(r'<figure class="fig.*?</figure>', s, re.S):
     name = re.search(r'/([^/"]+)\.jpg"', fig).group(1)
     c = re.search(r'<p class="cap"><strong>(.*?)</strong>\s?(.*?)</p>', fig, re.S)
     caps[name] = [u(c.group(1)), u(c.group(2))]
