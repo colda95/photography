@@ -8,7 +8,8 @@ Questa cartella contiene gli script che generano le pagine del sito. Non viene p
 - `testi_utente.json` — i testi attuali (didascalie, introduzioni, titoli), comprese tutte le correzioni fatte a mano. Hanno la precedenza su `content_usa.py`.
 - `testi_en.json` — la versione inglese degli stessi testi (stesse chiavi, stessi nomi di foto), più titolo dell'album, date dei capitoli e testi alternativi delle immagini. Quando cambi un testo italiano, aggiorna anche quello inglese: se una didascalia manca, la build lo segnala e usa l'italiano.
 - `importa_testi.py` — rilegge i testi da `usa-2026/index.html` e aggiorna `testi_utente.json`. Con `en` (`python3 _sorgenti/importa_testi.py en`) fa lo stesso per `en/usa-2026/index.html` e `testi_en.json`.
-- `build_site.py` — rigenera le pagine HTML in tutte e due le lingue. I testi fissi dell'interfaccia (pulsanti, colophon, copertina) sono nel dizionario `UI` all'inizio del file.
+- `temi.py` — i temi della home (Paesaggi, Animali, Strada, Alba e tramonto): nome e descrizione nelle due lingue, foto di copertina ed elenco delle foto. Ogni tema diventa una pagina in `temi/<nome>/`. Le foto devono essere già in un album: didascalie e testi vengono da lì.
+- `build_site.py` — rigenera le pagine HTML in tutte e due le lingue. I testi fissi (home, menu, pulsanti, colophon, altri progetti) sono nel dizionario `UI` all'inizio del file; lì ci sono anche `EMAIL` (indirizzo mostrato in Contatti), `GITHUB` e `HOME_IMAGE` (la foto grande in cima alla home).
 
 ## Lingue
 
