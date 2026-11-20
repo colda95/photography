@@ -39,15 +39,15 @@ UI = {
         facts='{n} fotografie · {c} capitoli', open_album='Apri l’album →'),
     'en': dict(
         html_lang='en', locale='en_US', rights='All rights reserved.', lang_nav='Language',
-        open_full='Open full screen', open_map='Open on the map', chapter='Chapter', nav='Navigation',
+        open_full='View full screen', open_map='View on map', chapter='Chapter', nav='Navigation',
         route_kicker='The route', route_title='Nine stops, three states',
-        col_photos='Photographs', col_camera='Camera', col_lenses='Lenses', col_dev='Processing', col_map='Map',
+        col_photos='Photographs', col_camera='Camera', col_lenses='Lenses', col_dev='Editing', col_map='Map',
         map_credit='Rivers, lakes and borders: Natural Earth<br>Relief: NASA SRTM, via OpenTopography',
-        all_albums='← All albums', rotate='Rotate your phone to see it larger', close='Close',
+        all_albums='← All albums', rotate='Turn your phone sideways for a bigger view', close='Close',
         home_kicker=('Photography', 'Travel albums'), home_title='Photography',
         home_desc='Travel photo albums by {author}.',
-        home_sub='Journeys told in pictures, shot on a Canon EOS R7 and edited in Lightroom.',
-        facts='{n} photographs · {c} chapters', open_album='Open the album →'),
+        home_sub='Travel stories told in pictures, shot on a Canon EOS R7 and edited in Lightroom.',
+        facts='{n} photographs · {c} chapters', open_album='View the album →'),
 }
 TEXTS = {'it': 'testi_utente.json', 'en': 'testi_en.json'}
 
