@@ -1,0 +1,23 @@
+{
+ "author": "Dario Coluzzi",
+ "site_url": "https://colda95.github.io/photography/",
+ "email": "dario.coluzzi@gmail.com",
+ "github": "",
+ "languages": [
+  "it",
+  "en"
+ ],
+ "albums": [
+  "usa-2026"
+ ],
+ "home_cover": {
+  "landscape": "home/photos/landscape.jpg",
+  "portrait": "home/photos/portrait.jpg"
+ },
+ "og_image": "common/og-red-earth.jpg",
+ "lenses": {
+  "16mm F1.4 DC DN | Contemporary 017": "Sigma 16 mm f/1.4 DC DN Contemporary",
+  "RF24-105mm F4 L IS USM": "RF 24–105 mm f/4L IS USM",
+  "RF100-400mm F5.6-8 IS USM": "RF 100–400 mm f/5.6–8 IS USM"
+ }
+}

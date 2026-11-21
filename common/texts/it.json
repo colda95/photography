@@ -1,0 +1,41 @@
+{
+ "html_lang": "it",
+ "locale": "it_IT",
+ "lang_nav": "Lingua",
+ "nav": "Menu principale",
+ "menu": {
+  "album": "Album",
+  "contatti": "Contatti"
+ },
+ "chapter": "Capitolo",
+ "route_kicker": "Il percorso",
+ "map_go": "Vai al capitolo",
+ "open_full": "Apri a schermo intero",
+ "open_map": "Apri sulla mappa",
+ "rotate": "Ruota il telefono per vederla più grande",
+ "close": "Chiudi",
+ "col_photos": "Fotografie",
+ "col_camera": "Fotocamera",
+ "col_lenses": "Obiettivi",
+ "col_dev": "Sviluppo",
+ "col_map": "Mappa",
+ "all_albums": "Torna alla home",
+ "rights": "Tutti i diritti riservati.",
+ "foot": "© {year} {author}. Tutti i diritti riservati. Fotografie e testi non possono essere riprodotti senza autorizzazione scritta.",
+ "date_format": "{d} {m} {y}",
+ "months": [
+  "gennaio",
+  "febbraio",
+  "marzo",
+  "aprile",
+  "maggio",
+  "giugno",
+  "luglio",
+  "agosto",
+  "settembre",
+  "ottobre",
+  "novembre",
+  "dicembre"
+ ],
+ "time_12h": false
+}

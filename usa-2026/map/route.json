@@ -1,0 +1,88 @@
+{
+ "area": {
+  "lon0": -116.1,
+  "lon1": -108.15,
+  "lat0": 34.95,
+  "lat1": 39.15
+ },
+ "scale": 190,
+ "lat_ref": 37,
+ "pad": 40,
+ "river_width": {
+  "Colorado": 2.4,
+  "Green": 1.7,
+  "San Juan": 1.7,
+  "Little Colorado": 1.3,
+  "Virgin": 1.4
+ },
+ "water_labels": [
+  ["Colorado", 38.62, -109.3, "start", 0],
+  ["Lake Powell", 37.45, -110.52, "start", 0],
+  ["Lake Mead", 35.93, -114.28, "middle", 0],
+  ["San Juan", 37.3, -109.3, "middle", 0],
+  ["Green", 38.8, -110.05, "end", 0],
+  ["Virgin", 36.9, -113.72, "start", 0],
+  ["Little Colorado", 35.72, -111.3, "middle", 0]
+ ],
+ "region_labels": [
+  ["GREAT BASIN", 37.75, -115.35, "region"],
+  ["La Sal Mountains", 38.33, -109.23, "relief"],
+  ["Henry Mountains", 38.05, -110.8, "relief"],
+  ["Kaibab Plateau", 36.45, -112.18, "relief"],
+  ["Aquarius Plateau", 38.02, -111.55, "relief"],
+  ["Navajo Mountain", 37.03, -110.87, "relief"]
+ ],
+ "states": [
+  ["NEVADA", 38.45, -115.9, "start"],
+  ["UTAH", 38.35, -111.0, "middle"],
+  ["ARIZONA", 35.45, -110.9, "middle"],
+  ["COLORADO", 38.2, -108.6, "middle"],
+  ["NEW MEXICO", 35.45, -108.6, "middle"],
+  ["CALIFORNIA", 35.1, -115.95, "start"]
+ ],
+ "mobile_hidden_states": ["NEW MEXICO", "CALIFORNIA", "COLORADO"],
+ "markers": [[37.0, -109.045, "Four Corners"]],
+ "waypoints": [[35.33, -112.88, "Route 66", 0, 22, "middle"], [37.1026, -109.9892, "Forrest Gump Point", 10, -6, "start"]],
+ "stops": [
+  [36.1699, -115.1398, "Las Vegas", "", "", -16, 30, "end"],
+  [36.0577, -112.1389, "Grand Canyon", "5 aprile", "I", 18, 8, "start"],
+  [36.8617, -111.3743, "Antelope Canyon", "6 aprile", "II", 16, 34, "start"],
+  [36.9386, -110.0908, "Monument Valley", "7 aprile", "III", 16, 34, "start"],
+  [37.8606, -109.3756, "Blue Mountains", "7–8 aprile", "IV", -18, 6, "end"],
+  [38.7013, -109.5645, "Arches", "8 aprile", "V", -16, 30, "end"],
+  [37.5928, -112.1869, "Bryce Canyon", "9 aprile", "VI", 16, -18, "start"],
+  [37.2463, -112.8034, "Il Ranch", "9–10 aprile", "VII", 16, 24, "start"],
+  [37.2722, -112.9459, "Zion", "10–11 aprile", "VIII", -14, -20, "end"]
+ ],
+ "route": [
+  [36.1699, -115.1398],
+  [35.9, -114.6],
+  [35.33, -112.88],
+  [35.25, -112.19],
+  [36.0577, -112.1389],
+  [36.8617, -111.3743],
+  [36.9386, -110.0908],
+  [37.1026, -109.9892],
+  [37.8606, -109.3756],
+  [38.57, -109.55],
+  [38.7013, -109.5645],
+  [38.95, -110.3],
+  [38.6, -111.6],
+  [37.9625, -111.9943],
+  [37.5928, -112.1869],
+  [37.2463, -112.8034],
+  [37.2722, -112.9459],
+  [37.1, -113.5],
+  [36.8, -114.07],
+  [36.1699, -115.1398]
+ ],
+ "shift": {
+  "desktop": {
+   "VII": [26, 3]
+  },
+  "mobile": {
+   "VII": [34, 10],
+   "VIII": [-30, -8]
+  }
+ }
+}

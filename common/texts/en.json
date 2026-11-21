@@ -1,0 +1,41 @@
+{
+ "html_lang": "en",
+ "locale": "en_US",
+ "lang_nav": "Language",
+ "nav": "Main menu",
+ "menu": {
+  "album": "Albums",
+  "contatti": "Contact"
+ },
+ "chapter": "Chapter",
+ "route_kicker": "The route",
+ "map_go": "Go to chapter",
+ "open_full": "View full screen",
+ "open_map": "View on map",
+ "rotate": "Turn your phone sideways for a bigger view",
+ "close": "Close",
+ "col_photos": "Photographs",
+ "col_camera": "Camera",
+ "col_lenses": "Lenses",
+ "col_dev": "Editing",
+ "col_map": "Map",
+ "all_albums": "Back to home",
+ "rights": "All rights reserved.",
+ "foot": "© {year} {author}. All rights reserved. No photographs or text may be reproduced without written permission.",
+ "date_format": "{m} {d}, {y}",
+ "months": [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+ ],
+ "time_12h": true
+}

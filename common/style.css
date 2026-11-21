@@ -1,0 +1,267 @@
+/* Dario Coluzzi · Fotografie
+   Tema scuro: nero, testo avorio, un solo accento ocra tenue. Font di sistema (San Francisco su Mac e iPhone).
+   Tutte le pagine usano gli stessi elementi: scala dei testi, copertina a tutto schermo, animazioni.
+   Le animazioni (comparsa allo scorrimento, barra che si scurisce) le attiva common/site.js;
+   chi ha chiesto al sistema di ridurre il movimento vede la pagina ferma. */
+
+:root{
+  color-scheme:dark;
+  /* colori */
+  --bg:#000; --ink:#ece7df; --ink-2:#c9c2b7; --muted:#9a9388; --faint:#7d776e; --rule:#2a2723;
+  --accent:#c6a473;            /* ocra tenue: numeri dei capitoli, percorso sulla mappa */
+  --surface:#0b0a09; --water:#7f98a6; --relief:#2a2723; --land:#0b0a09; --shade:#000; --shade-op:.8; --high:#8e9c78; --high-op:.12;
+  /* testo: un solo carattere e una sola scala per tutto il sito */
+  --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","Segoe UI",Roboto,Arial,sans-serif;
+  --serif:var(--sans); --display:var(--sans); --mono:var(--sans);
+  --t-cover:clamp(40px,6.4vw,92px);       /* nome in home, titolo dell'album */
+  --t-h2:clamp(40px,6vw,76px);            /* titoli di sezione e di capitolo */
+  --t-h3:clamp(26px,3.2vw,40px);          /* voci dell'indice, titolo della mappa, colophon */
+  --t-lead:clamp(22px,2.6vw,34px);        /* frasi d'apertura */
+  --t-intro:clamp(19px,1.8vw,23px);       /* introduzioni */
+  --t-body:17px; --t-small:15px; --t-meta:13px;
+  /* movimento: stessa curva e stesse durate ovunque */
+  --ease:cubic-bezier(.16,.84,.24,1);
+  --t-in:1.2s;                            /* comparsa */
+  --t-hover:.7s;                          /* reazione al puntatore */
+  --rise:28px;                            /* di quanto sale un elemento quando compare */
+  --t-photo:2.6s;                         /* comparsa delle foto */
+  --t-open:1s;                            /* apertura di una foto a schermo intero */
+  /* spazi */
+  --gut:clamp(20px,4vw,56px);
+  --max:1200px;
+  --cols:[full-start] minmax(var(--gut),1fr) [main-start] minmax(0,var(--max)) [main-end] minmax(var(--gut),1fr) [full-end];
+  --nav-h:56px;
+  --radius:2px;
+}
+
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(var(--nav-h) + 16px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--t-body)/1.5 var(--sans);letter-spacing:-.016em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:clip}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:background-size var(--t-hover) var(--ease),color var(--t-hover) var(--ease)}
+a:hover,a:focus-visible{background-size:100% 1px}
+:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+::selection{background:var(--accent);color:#000}
+[hidden]{display:none!important}
+.link{background-size:100% 1px;background-image:linear-gradient(var(--faint),var(--faint))}
+.link:hover,.link:focus-visible{background-image:linear-gradient(currentColor,currentColor)}
+
+/* ---------- Barra di navigazione (uguale su tutte le pagine) ---------- */
+.gnav{position:fixed;top:0;left:0;right:0;z-index:20;height:calc(var(--nav-h) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);
+  border-bottom:1px solid transparent;transition:background-color .6s var(--ease),border-color .6s var(--ease),-webkit-backdrop-filter .6s,backdrop-filter .6s}
+.gnav.solid{background:rgba(0,0,0,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom-color:var(--rule)}
+.gnav-in{max-width:calc(var(--max) + 2*var(--gut));height:var(--nav-h);margin:0 auto;padding:0 var(--gut);display:flex;align-items:center;gap:28px;font-size:var(--t-meta);letter-spacing:.03em}
+.gnav a{color:rgba(236,231,223,.78);background:none;padding:12px 0}
+.gnav a:hover,.gnav a:focus-visible,.gnav a[aria-current]{color:var(--ink)}
+.gnav .brand{font:600 15px/1 var(--sans);letter-spacing:-.01em;color:var(--ink);margin-right:auto;transition:opacity .6s var(--ease)}
+.gnav.on-cover .brand{opacity:0;pointer-events:none}         /* in home il nome è già al centro della foto */
+.gnav-links{display:flex;gap:28px}
+.lang{display:flex;align-items:center;gap:2px;font-size:var(--t-meta);letter-spacing:.06em}
+.lang a{padding:12px 8px;min-width:40px;text-align:center}
+.lang span{color:var(--faint)}
+.gnav:not(.solid){text-shadow:0 1px 12px rgba(0,0,0,.35)}
+@media (max-width:640px){.gnav-links{display:none}}
+
+/* ---------- Griglia ---------- */
+main{display:grid;grid-template-columns:var(--cols)}
+main>*{grid-column:full;display:grid;grid-template-columns:var(--cols);align-content:start}
+main>*>*{grid-column:main}
+.page-top{padding-top:calc(var(--nav-h) + env(safe-area-inset-top,0px))}
+
+/* Titoli di sezione */
+.sec{padding-block:clamp(104px,14vw,184px) 0}
+.sec-head{display:grid;gap:12px;margin-bottom:clamp(36px,5vw,64px);max-width:760px}
+.sec-head h2{font:600 var(--t-h2)/1.04 var(--sans);letter-spacing:-.035em;margin:0}
+.sec-head p{margin:0;font:400 var(--t-intro)/1.45 var(--sans);color:var(--muted)}
+
+/* ---------- Copertina a tutto schermo (home e album) ---------- */
+.cover{display:block;position:relative;height:100svh;min-height:520px;overflow:hidden;background:#000;color:#fff;isolation:isolate}
+.cover picture,.cover>img{position:absolute;inset:0;display:block}
+.cover picture{will-change:transform}       /* site.js la sposta per l'effetto di profondità */
+.cover img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;pointer-events:none;user-select:none;-webkit-touch-callout:none}
+.cover::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,.18) 28%,rgba(0,0,0,0) 46%,rgba(0,0,0,0) 66%,rgba(0,0,0,.45) 84%,#000 100%)}   /* in basso la foto sfuma nel nero della pagina */
+.cover-text{position:absolute;left:0;right:0;top:calc(var(--nav-h) + env(safe-area-inset-top,0px) + clamp(24px,7vh,88px));z-index:2;text-align:center;padding:0 var(--gut)}
+.cover h1{font:600 var(--t-cover)/1 var(--sans);letter-spacing:-.04em;margin:0}
+.cue{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 28px);z-index:2;width:1px;height:56px;margin-left:-.5px;background:rgba(255,255,255,.25);overflow:hidden}
+.cue::after{content:"";position:absolute;left:0;top:0;width:1px;height:50%;background:#fff}
+
+/* ---------- Home ---------- */
+.statement{padding-block:clamp(104px,14vw,184px) 0}
+.statement p{margin:0;font:600 clamp(26px,3.6vw,52px)/1.2 var(--sans);letter-spacing:-.035em;text-wrap:pretty}
+.statement p+p{margin-top:.8em;color:var(--muted)}
+
+/* Album: grandi foto d'anteprima con la didascalia sotto, due per riga su computer.
+   Se gli album sono dispari, il più recente occupa tutta la larghezza. */
+.albums{display:grid;grid-template-columns:1fr 1fr;gap:clamp(56px,7vw,96px) clamp(16px,2vw,28px)}
+.alb{display:block;background:none;color:var(--ink)}
+.alb:first-child:nth-last-child(odd){grid-column:1/-1}
+.alb .im{position:relative;overflow:hidden;border-radius:var(--radius);aspect-ratio:4/3;background:var(--surface)}
+.alb:first-child:nth-last-child(odd) .im{aspect-ratio:auto;height:min(70vh,680px)}
+.alb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.6s var(--ease)}
+.alb:hover img,.alb:focus-visible img{transform:scale(1.03)}
+.alb .cap{display:flex;justify-content:space-between;align-items:baseline;gap:24px;margin-top:18px}
+.alb h3{font:600 var(--t-h3)/1.1 var(--sans);letter-spacing:-.03em;margin:0;transition:color var(--t-hover) var(--ease)}
+.alb:hover h3,.alb:focus-visible h3{color:var(--accent)}
+.alb .cap p{margin:0;font-size:var(--t-small);color:var(--muted);text-align:right}
+@media (max-width:760px){
+  .albums{grid-template-columns:1fr}
+  .alb .im,.alb:first-child:nth-last-child(odd) .im{aspect-ratio:4/3;height:auto}
+  .alb .cap{flex-direction:column;gap:6px}
+  .alb .cap p{text-align:left}
+}
+
+/* Contatti */
+.contact{padding-bottom:clamp(104px,14vw,184px)}
+.contact .sec-head{margin-bottom:14px}
+.contact .mail{justify-self:start;font:400 var(--t-intro)/1.45 var(--sans);color:var(--ink);word-break:break-word;background:none;transition:color var(--t-hover) var(--ease)}
+.contact .mail:hover,.contact .mail:focus-visible{color:var(--accent)}
+.contact ul{list-style:none;margin:28px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:12px 32px;font-size:var(--t-small)}
+
+/* Piè di pagina */
+.foot{border-top:1px solid var(--rule);padding-block:24px calc(32px + env(safe-area-inset-bottom,0px));font-size:var(--t-meta);line-height:1.6;color:var(--faint)}
+.foot p{margin:0}
+
+/* ---------- Album ---------- */
+.opening{padding-block:clamp(104px,14vw,184px) 0}
+.lede{font:600 var(--t-lead)/1.25 var(--sans);letter-spacing:-.03em;max-width:26em;margin:0 auto clamp(88px,12vw,152px);text-align:center;text-wrap:balance}
+
+/* Capitoli */
+.ch{row-gap:clamp(32px,4.5vw,64px);padding-block:clamp(120px,15vw,200px) 0}
+.ch-head{display:grid;gap:16px;max-width:780px;margin-bottom:clamp(8px,2vw,24px)}
+.ch-meta{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0;font-size:var(--t-body);font-weight:600;color:var(--accent)}
+.ch-meta span+span{color:var(--muted);font-weight:400}
+.ch-head h2{font:600 var(--t-h2)/1.04 var(--sans);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.intro{margin:0;max-width:36em;font:500 var(--t-intro)/1.45 var(--sans);letter-spacing:-.02em;color:var(--ink-2);text-wrap:pretty}
+
+/* Foto */
+.fig{margin:0;display:grid;gap:14px;align-content:start;min-width:0;container-type:inline-size}
+.ph{all:unset;display:block;cursor:zoom-in;line-height:0;border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+.ph:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+.ph img{width:100%;height:auto;pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none;transition:transform 1.4s var(--ease),opacity var(--t-hover) var(--ease)}
+@media (hover:hover){.ph:hover img{transform:scale(1.025)}}
+figcaption{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;font-size:var(--t-small);line-height:1.5;letter-spacing:-.01em;color:var(--muted)}
+figcaption strong{font-weight:600;color:var(--ink)}
+figcaption .no{display:none}
+figcaption .cap{margin:0;max-width:64ch}
+figcaption .meta{margin:0;display:flex;flex-wrap:wrap;gap:2px 16px;font-size:var(--t-meta);line-height:1.5;color:var(--faint);letter-spacing:0;font-variant-numeric:tabular-nums}
+.meta>span{display:block}
+.meta i{font-style:normal;white-space:nowrap}
+.meta a:hover{color:var(--ink)}
+@container (min-width:720px){
+  figcaption{grid-template-columns:minmax(0,1fr) auto;column-gap:48px}
+  figcaption .meta{grid-column:2;grid-row:1;flex-direction:column;align-items:flex-end;text-align:right;padding-top:3px}
+}
+
+.group{display:flex;gap:clamp(16px,2vw,28px);align-items:flex-start}
+.group>.fig{flex:var(--r) 1 0}
+.grid-offset{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(16px,2vw,28px);align-items:end}
+.grid-offset>.span-main{grid-column:1/9}
+.grid-offset>.side{grid-column:9/13}
+.grid-offset.rev>.side{grid-column:1/5;grid-row:1}
+.grid-offset.rev>.span-main{grid-column:5/13;grid-row:1}
+@media (max-width:760px){
+  .group{flex-direction:column;gap:40px}
+  .group>.fig{flex:none;width:100%}
+  .grid-offset{gap:40px}
+  .grid-offset>.span-main,.grid-offset>.side,.grid-offset.rev>.side,.grid-offset.rev>.span-main{grid-column:1/-1;grid-row:auto}
+}
+
+/* Colophon */
+.colophon{padding-block:clamp(136px,17vw,224px) clamp(72px,9vw,120px)}
+.colophon h2{font:600 var(--t-h3)/1.1 var(--sans);letter-spacing:-.03em;margin:0 0 32px}
+.colophon dl{margin:0;max-width:820px;border-top:1px solid var(--rule)}
+.colophon dl>div{display:grid;grid-template-columns:10rem 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule);font-size:var(--t-small)}
+.colophon dt{color:var(--muted)}
+.colophon dd{margin:0;color:var(--ink-2)}
+.copy{margin:28px 0 0;font-size:var(--t-meta);color:var(--faint);max-width:820px}
+.backlink{font-size:var(--t-small);color:var(--ink)}
+@media (max-width:520px){.colophon dl>div{grid-template-columns:1fr;gap:2px}}
+
+/* ---------- Schermo intero ---------- */
+.lb{position:fixed;inset:0;z-index:30;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 24px);cursor:zoom-out}
+.lb img{pointer-events:none;-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none;max-width:100%;max-height:calc(100% - 3rem);width:auto;height:auto;object-fit:contain}
+.lb p{margin:0;color:var(--ink-2);font-size:var(--t-small);text-align:center;max-width:70ch}
+.lb-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 8px);right:var(--gut);background:none;border:0;color:var(--muted);font:400 var(--t-meta) var(--sans);letter-spacing:.04em;padding:14px 4px;cursor:pointer}
+.lb-x:hover,.lb-x:focus-visible{color:var(--ink)}
+.lb-rot{display:flex;align-items:center;gap:10px;font-size:var(--t-meta)!important}
+.lb-rot svg{flex:none;width:28px;height:28px}
+
+/* ---------- Mappa del percorso ---------- */
+.route-map{margin:0;display:grid;gap:20px}
+.map-head{display:grid;gap:8px;margin-bottom:4px;text-align:center}
+.map-head .kicker{margin:0;font-size:var(--t-body);font-weight:600;color:var(--accent)}
+.map-title{font:600 var(--t-h3)/1.1 var(--sans);letter-spacing:-.03em;margin:0;color:var(--ink)}
+.map{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--rule)}
+.map a{background:none}
+.map-frame{fill:none;stroke:none}
+.map-deg{font:400 11px var(--sans);fill:var(--faint)}
+.map-border{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:6 5;opacity:.45}
+.map-state{font:400 13px var(--sans);letter-spacing:.24em;fill:var(--muted);opacity:.7}
+.map-region{font:400 15px var(--sans);letter-spacing:.32em;fill:var(--muted);opacity:.38}
+.map-mount{fill:var(--relief)}
+.map-relief{font:300 12.5px var(--sans);fill:var(--muted)}
+.map-lake{fill:var(--water);fill-opacity:.3;stroke:var(--water);stroke-width:.8;stroke-linejoin:round}
+.map-river{fill:none;stroke:var(--water);stroke-linejoin:round;stroke-linecap:round;opacity:.75}
+.map-land{fill:var(--land)}
+.map-hill{opacity:var(--shade-op)}
+.map-high{opacity:var(--high-op)}
+.map-flood-shade{flood-color:var(--shade)}
+.map-flood-high{flood-color:var(--high)}
+.map-peak{fill:var(--muted);opacity:.8}
+.map-water{font:300 13px var(--sans);fill:var(--water)}
+.map-route{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.map-stop{fill:var(--accent);stroke:#000;stroke-width:3;transition:transform var(--t-hover) var(--ease);transform-box:fill-box;transform-origin:center}
+.map-num{font:500 10px var(--sans);fill:#000}
+.map-start{fill:var(--ink);stroke:#000;stroke-width:3}
+.map-way{fill:#000;stroke:var(--accent);stroke-width:2}
+.map-fc{fill:var(--muted)}
+.map-lab{font:600 22px var(--sans);letter-spacing:-.02em;fill:var(--ink);transition:fill var(--t-hover) var(--ease)}
+.map-sub,.map-small{font:400 12px var(--sans);fill:var(--muted)}
+.map-scale line{stroke:var(--ink-2);stroke-width:1.2}
+.map-link{cursor:pointer}
+.map-link:hover .map-lab,.map-link:focus-visible .map-lab{fill:var(--accent)}
+.map-link:hover .map-stop,.map-link:focus-visible .map-stop{transform:scale(1.15)}
+.map-link:focus{outline:none}
+.map-link:focus-visible .map-stop{stroke:var(--ink)}
+.map-mobile,.map-legend{display:none}
+.map-mobile .map-state{font-size:34px;letter-spacing:.18em}
+.map-mobile .map-small{font-size:30px}
+@media (max-width:760px){
+  .map-desktop{display:none}
+  .map-mobile{display:block}
+}
+
+/* ---------- Animazioni (identiche su tutte le pagine) ---------- */
+@media (prefers-reduced-motion:no-preference){
+  /* copertina: la foto si assesta lentamente, poi compare il testo */
+  /* finché la foto non è pronta, copertina e titolo restano nascosti; poi partono insieme (site.js aggiunge .ready) */
+  .js .cover:not(.ready) img,.js .cover:not(.ready) .cover-text,.js .cover:not(.ready) .cue{opacity:0}
+  .js .cover:not(.ready) img,.js .cover:not(.ready) .cover-text{animation:fade 1s var(--ease) 6s forwards}   /* sicurezza se site.js non parte */
+  .cover.ready img{animation:settle 3.2s var(--ease) both}
+  .cover.ready h1{will-change:opacity,transform;animation:title 1.8s var(--ease) .5s both}
+  .cover.ready .cue{animation:fade var(--t-in) var(--ease) 1.6s both}
+  .cue::after{animation:cue 2.4s var(--ease) 1.6s infinite}
+  .gnav{animation:fade var(--t-in) var(--ease) .2s both}
+  /* comparsa allo scorrimento: site.js aggiunge .rv agli elementi e .in quando entrano nello schermo */
+  .rv{will-change:opacity,transform;opacity:0;transform:translateY(var(--rise));transition:opacity var(--t-in) var(--ease) var(--d,0s),transform var(--t-in) var(--ease) var(--d,0s)}
+  .rv.in{opacity:1;transform:none}
+  .fig.rv{--rise:20px;transition-duration:var(--t-photo)}
+  .fig.rv .ph img{will-change:transform;transform:scale(1.06);transition:transform calc(var(--t-photo) * 1.5) var(--ease) var(--d,0s)}
+  .fig.rv.in .ph img{transform:none}
+  .route-map.rv .map-route{stroke-dasharray:var(--len,4000);stroke-dashoffset:var(--len,4000);transition:stroke-dashoffset 3.2s var(--ease) .4s}
+  .route-map.rv.in .map-route{stroke-dashoffset:0}
+  /* schermo intero */
+  .lb:not([hidden]){animation:fade calc(var(--t-open) * .8) var(--ease) both}
+  .lb:not([hidden]) img{animation:zoom var(--t-open) var(--ease) .15s both}
+  .lb:not([hidden]) p{animation:fade var(--t-open) var(--ease) .45s both}
+  .lb-rot svg{animation:rot 2.4s ease-in-out infinite}
+  @keyframes settle{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+  @keyframes rise{from{opacity:0;transform:translateY(var(--rise))}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes title{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+  @keyframes zoom{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+  @keyframes cue{0%{transform:translateY(-100%)}60%,100%{transform:translateY(200%)}}
+  @keyframes rot{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+}
