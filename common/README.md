@@ -3,15 +3,13 @@
 ## Struttura
 
 ```
-index.html                  home in italiano (deve stare qui: è la pagina d'ingresso del sito)
+index.html                  home (deve stare qui: è la pagina d'ingresso del sito)
 home/
-  en/index.html             home in inglese
   photos/landscape.jpg      foto di copertina della home su computer (orizzontale)
   photos/portrait.jpg       foto di copertina della home su telefono (verticale)
   texts/it.json, en.json    testi della home
 usa-2026/                   un album: tutto quello che lo riguarda sta qui
-  index.html                album in italiano
-  en/index.html             album in inglese
+  index.html                pagina dell'album
   photos/2048/              foto mostrate nella pagina
   photos/2880/              foto a schermo intero (da qui si leggono anche i dati di scatto)
   texts/it.json, en.json    titolo, date, introduzioni, didascalie, testi della mappa
@@ -43,11 +41,9 @@ Le pagine `index.html` sono generate: non si modificano a mano (se lo fai, vedi 
 
 ## Testi e lingue
 
-- Per correggere un testo, modifica il JSON della lingua giusta e rigenera. Le chiavi sono uguali in tutte le lingue.
-- Se in una lingua manca un testo, la build lo segnala e usa quello italiano.
-- Per aggiungere una lingua, aggiungi `<codice>.json` in `common/texts/`, `home/texts/` e nei `texts/` di ogni album, poi il codice in `languages` dentro `common/config.json`.
-- Chi apre una pagina italiana con un browser che non ha l'italiano tra le lingue preferite viene portato all'inglese; la scelta fatta con il selettore IT / EN resta salvata nel browser.
-- Foto di copertina della home: sostituisci `home/photos/landscape.jpg` (computer) e `home/photos/portrait.jpg` (telefono) con le tue, tenendo gli stessi nomi; oppure cambia i percorsi in `home_cover` dentro `common/config.json`. Conviene usare foto con cielo o spazio tranquillo in alto, dove sta il nome.
+- Il sito è in inglese, che è l'unica lingua in `languages` dentro `common/config.json`. I titoli degli album possono restare in italiano: si scrivono come preferisci in `<album>/texts/en.json`.
+- Per correggere un testo, modifica il JSON e rigenera. Le didascalie sono legate al nome della foto, i capitoli al loro numero.
+- I testi italiani (`texts/it.json` in `common/`, `home/` e negli album) restano conservati ma non vengono usati. Per riattivare l'italiano, aggiungi `"it"` in `languages`: la prima lingua dell'elenco sta nella radice del sito, le altre in una sottocartella, e compaiono il selettore di lingua e il passaggio automatico in base al browser.
 - Email in Contatti: scrivila in `email` dentro `common/config.json` (vuota = non mostrata).
 
 ## Animazioni
@@ -61,8 +57,7 @@ Serve Python 3 con Pillow (`pip3 install Pillow`). Dalla cartella principale del
 ```
 python3 common/code/build_site.py                  # rigenera tutte le pagine
 python3 -m http.server 8000                          # anteprima su http://localhost:8000
-python3 common/code/import_texts.py usa-2026      # solo se hai corretto a mano l'HTML italiano dell'album
-python3 common/code/import_texts.py usa-2026 en   # idem per l'HTML inglese
+python3 common/code/import_texts.py usa-2026      # solo se hai corretto a mano l'HTML dell'album
 python3 common/code/make_map.py usa-2026 --force   # rifà da zero la mappa dell'album (perde le rifiniture a mano)
 python3 common/code/relief.py usa-2026            # ricalcola il rilievo della mappa (pip3 install numpy tifffile imagecodecs)
 ```

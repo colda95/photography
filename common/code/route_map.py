@@ -166,7 +166,7 @@ class RouteMap:
             x, y = pos[(la, lo)]
             name = t.get(num, name)
             if num:
-                o.append(f'<a href="#cap-{num.lower()}" class="map-link"><title>{text[1]} {arabic(num)}: {name}</title>' + _pill(x, y, arabic(num), s)
+                o.append(f'<a href="#chapter-{arabic(num)}" class="map-link"><title>{text[1]} {arabic(num)}: {name}</title>' + _pill(x, y, arabic(num), s)
                          + ('' if mobile else f'<text x="{x+dx+(6 if anc=="start" else -6 if anc=="end" else 0):.1f}" y="{y+dy-4:.1f}" class="map-lab" text-anchor="{anc}">{name}</text>') + '</a>')
             else:
                 q = 8 * s

@@ -4,8 +4,8 @@
  "lang_nav": "Language",
  "nav": "Main menu",
  "menu": {
-  "album": "Albums",
-  "contatti": "Contact"
+  "albums": "Albums",
+  "contact": "Contact"
  },
  "chapter": "Chapter",
  "route_kicker": "The route",

@@ -134,6 +134,8 @@ def href(page, lang, up):
     return (up + page_path(page, lang)) or './'
 
 def lang_switch(lang, page, up):
+    if len(LANGS) == 1:                                  # una sola lingua: niente selettore
+        return ''
     links = []
     for l in LANGS:
         cur = ' aria-current="page"' if l == lang else ''
@@ -144,6 +146,8 @@ def lang_script(lang, page, up):
     """Lingua automatica. Se il visitatore ha già scelto una lingua con il selettore, vale quella (salvata nel browser).
     Altrimenti, solo sulle pagine della lingua principale: se il browser non la indica tra le lingue preferite,
     si passa alla seconda lingua. I motori di ricerca non vengono reindirizzati: trovano le versioni grazie a hreflang."""
+    if len(LANGS) == 1:                                  # una sola lingua: serve solo il segnale per le animazioni
+        return '<script>document.documentElement.className+=" js"</script>'
     alt = {l: href(page, l, up) for l in LANGS}
     fallback = LANGS[1] if len(LANGS) > 1 else MAIN
     return ('<script>document.documentElement.className+=" js";(function(){var L=%s,M=%s,F=%s,A=%s,s=null;try{s=localStorage.getItem("lang")}catch(e){}'
@@ -250,7 +254,7 @@ def render_album(al, lang, meta, ver):
     chapters_html = ''
     for ch in al.chapters:
         c = A['chapters'][ch['num']]
-        chapters_html += f'''<section class="ch" id="cap-{ch["num"].lower()}">
+        chapters_html += f'''<section class="ch" id="chapter-{arabic(ch["num"])}">
   <header class="ch-head">
     <p class="ch-meta"><span>{T["chapter"]} {arabic(ch["num"])}</span><span>{c["date"]}</span></p>
     <h2>{esc(c["title"])}</h2>
@@ -271,7 +275,7 @@ def render_album(al, lang, meta, ver):
         kw = dict(relief_href=layer('relief.png'), quota_href=layer('elevation.png'),
                   titles=names, text=(A['map_description'], T['map_go']))
         map_html = f'''
-    <figure class="route-map" id="mappa">
+    <figure class="route-map" id="map">
       <div class="map-head"><p class="kicker">{T["route_kicker"]}</p><h2 class="map-title">{A["map_title"]}</h2></div>
       {al.map.svg(**kw)}{al.map.svg(mobile=True, **kw)}
     </figure>'''
@@ -330,12 +334,12 @@ def render_home(albums, lang, meta, ver):
     <span class="cue" aria-hidden="true"></span>
   </header>
   <section class="statement"><p>{esc(T["home_sub"])}</p></section>
-  <section class="sec" id="album">
+  <section class="sec" id="albums">
     <div class="sec-head"><h2>{T["albums_h"]}</h2><p>{T["albums_p"]}</p></div>
     <div class="albums">
 {"".join(cards)}    </div>
   </section>
-  <section class="sec contact" id="contatti">
+  <section class="sec contact" id="contact">
     <div class="sec-head"><h2>{T["contact_h"]}</h2><p>{T["contact_p"]}</p></div>
     {mail}
     {github}
