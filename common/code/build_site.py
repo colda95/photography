@@ -5,7 +5,7 @@ Il codice non contiene testi né dati. Struttura (vedi common/README.md):
   home/en/index.html             home nelle altre lingue;  home/texts/<lingua>.json  i suoi testi
   <album>/index.html             album nella lingua principale;  <album>/en/index.html  nelle altre lingue
   <album>/photos/2880/          foto originali (JPEG da 2880 px): l'unica cosa da esportare
-  <album>/photos/web/           copie WebP leggere in più misure, generate dalla build (common/code/images.py)
+  <album>/photos/web/           copie leggere in più misure, generate dalla build (common/code/images.py)
   <album>/texts/<lingua>.json    testi dell'album;  <album>/structure.json  capitoli e impaginazione
   <album>/map/                   mappa (facoltativa): route.json, geodata.json, relief.png, elevation.png
   common/                        stile, script, config.json, testi comuni (texts/<lingua>.json) e questo codice (code/)
@@ -213,7 +213,7 @@ LIGHTBOX = ('<div class="lb" id="lb" hidden><img alt=""><p class="lb-cap"></p><p
 
 
 # ---------- foto: copie leggere in più misure ----------
-WEB = {}   # originale -> [(larghezza, copia WebP)], riempito da build()
+WEB = {}   # originale -> [(larghezza, copia)], riempito da build()
 MOBILE = '(max-width: 760px)'     # sotto questa larghezza le foto vanno una sotto l'altra (style.css)
 MAIN_W = 'min(1200px, 100vw)'     # larghezza della colonna principale
 

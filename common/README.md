@@ -12,7 +12,7 @@ home/
 usa-2026/                   un album: tutto quello che lo riguarda sta qui
   index.html                pagina dell'album
   photos/2880/              foto originali, JPEG da 2880 px (da qui si leggono anche i dati di scatto); solo sul Mac, non su GitHub
-  photos/web/               copie WebP in più misure, generate dalla build (non toccare)
+  photos/web/               copie in più misure, generate dalla build (non toccare)
   texts/it.json, en.json    titolo, date, introduzioni, didascalie, testi della mappa
   structure.json            capitoli, ordine e impaginazione delle foto
   map/                      facoltativa: route.json (area, tappe, percorso, etichette),
@@ -72,7 +72,7 @@ Le regole che tengono l'impaginazione robusta stanno in `common/style.css`: tutt
 ## Regole da ricordare
 
 - Ogni foto usata deve esistere in `photos/2880`: la build controlla e si ferma se ne manca una, e segnala le foto presenti ma non usate.
-- Foto leggere: per ogni originale la build crea in `photos/web/` copie WebP larghe 800, 1200, 1600 e 2880 px (`common/code/images.py`), e ogni pagina lascia scegliere al browser la più piccola che basta per lo schermo; a schermo intero si apre la più grande. Le copie si rifanno solo se l'originale cambia, e quelle che non servono più vengono cancellate. Vanno pubblicate su GitHub insieme al resto.
+- Foto leggere: per ogni originale la build crea in `photos/web/` copie larghe 1600 e 2880 px (`common/code/images.py`): la 2880 è l'originale identico, le altre sono JPEG ad alta qualità (90, colore 4:4:4) con una nitidezza leggera dopo il ridimensionamento. Niente WebP: a parità di peso spiana la grana delle foto. Ogni pagina lascia scegliere al browser la più piccola che basta per lo schermo; a schermo intero si apre la più grande. Le copie si rifanno solo se l'originale cambia, e quelle che non servono più vengono cancellate. Vanno pubblicate su GitHub insieme al resto.
 - Le foto originali (`*/photos/2880/` e le copertine `home/photos/*.jpg`) restano solo sul Mac: sono escluse da GitHub (`.gitignore`), dove vanno solo le copie in `photos/web/`. Servono per rigenerare il sito, quindi tienine una copia di sicurezza (Time Machine, disco esterno o cloud).
 - Dopo aver modificato `style.css` o `album.js`, rigenera: le pagine li richiamano con un numero di versione calcolato dal loro contenuto.
 - Mappe: fiumi, laghi e confini da Natural Earth (pubblico dominio); rilievo dal modello del terreno NASA SRTM a 90 m (da OpenTopography). I file `.tif` restano fuori da GitHub (`.gitignore`).

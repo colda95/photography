@@ -1,18 +1,23 @@
 """Versioni leggere delle foto per il web.
 
 L'unico originale di ogni foto è il JPEG da 2880 px (per gli album: <album>/photos/2880/).
-Da lì la build ricava da sola una serie di copie WebP in più larghezze, nella cartella web/ accanto
-(per gli album: <album>/photos/web/<nome>-<larghezza>.webp). Il browser sceglie la più piccola che
-basta per lo schermo: un telefono scarica circa un quarto di quello che scaricherebbe con le foto grandi.
+Da lì la build ricava da sola una serie di copie in più larghezze, nella cartella web/ accanto
+(per gli album: <album>/photos/web/<nome>-<larghezza>.jpg). Il browser sceglie la più piccola che
+basta per lo schermo.
+
+Qualità prima di tutto: la copia più grande è l'originale identico, byte per byte (nessuna ricompressione);
+le più piccole sono JPEG ad alta qualità con il colore a piena risoluzione (4:4:4) e una nitidezza leggera
+dopo il ridimensionamento, come l'"output sharpening" di Lightroom. (Il WebP a parità di peso spiana la grana
+e i dettagli fini: per delle fotografie non va bene.)
 
 Le copie si rifanno solo se mancano o se l'originale è più recente; quelle che non servono più
 (foto tolte o rinominate) vengono cancellate."""
-import os
+import os, shutil
 from concurrent.futures import ProcessPoolExecutor
-from PIL import Image, ImageOps
+from PIL import Image, ImageFilter, ImageOps
 
-WIDTHS = (800, 1200, 1600, 2880)         # larghezze generate (mai più grandi dell'originale)
-QUALITY = 80                             # qualità WebP: a occhio identica al JPEG, peso circa un terzo
+WIDTHS = (1600, 2880)                     # larghezze generate (mai più grandi dell'originale)
+QUALITY = 90                             # qualità JPEG delle copie ridotte
 
 
 def web_dir(src):
@@ -29,7 +34,7 @@ def plan(src):
             w, h = h, w
     widths = sorted({x for x in WIDTHS if x < w} | {min(w, WIDTHS[-1])})
     stem = os.path.splitext(os.path.basename(src))[0]
-    return [(x, os.path.join(web_dir(src), f'{stem}-{x}.webp')) for x in widths]
+    return [(x, os.path.join(web_dir(src), f'{stem}-{x}.jpg')) for x in widths]
 
 
 def _make(src):
@@ -39,11 +44,16 @@ def _make(src):
     os.makedirs(web_dir(src), exist_ok=True)
     with Image.open(src) as im:
         icc = im.info.get('icc_profile')          # profilo colore dell'originale: i colori restano quelli di Lightroom
-        im = ImageOps.exif_transpose(im).convert('RGB')
+        exif_rotated = im.getexif().get(0x0112, 1) != 1
+        full = ImageOps.exif_transpose(im).convert('RGB')
         for w, p in todo:
-            h = round(im.height * w / im.width)
-            out = im if w == im.width else im.resize((w, h), Image.LANCZOS)
-            out.save(p + '.tmp', 'WEBP', quality=QUALITY, method=5, icc_profile=icc)
+            if w == full.width and not exif_rotated:
+                shutil.copyfile(src, p + '.tmp')  # misura piena: l'originale identico
+            else:
+                out = full if w == full.width else full.resize((w, round(full.height * w / full.width)), Image.LANCZOS)
+                if w != full.width:
+                    out = out.filter(ImageFilter.UnsharpMask(radius=0.6, percent=45, threshold=1))
+                out.save(p + '.tmp', 'JPEG', quality=QUALITY, subsampling=0, optimize=True, progressive=True, icc_profile=icc)
             os.replace(p + '.tmp', p)
     return len(todo)
 
