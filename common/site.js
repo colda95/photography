@@ -23,9 +23,13 @@
     setTimeout(ready, 5000);                          // in ogni caso, dopo 5 secondi si mostra
   }
 
-  // Copertina: la foto scorre un po' più lenta della pagina (profondità); si muove il contenitore, non la foto
+  // Copertina: la foto scorre un po' più lenta della pagina (profondità); si muove il contenitore, non la foto.
+  // Solo con mouse o trackpad: su telefoni e tablet lo scorrimento a dito lo renderebbe a scatti.
+  // Dove il browser sa farlo da solo (animation-timeline in style.css), lo script non serve.
   var layer = cover && cover.querySelector('picture');
-  if (layer && !still) {
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var native = window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()');
+  if (layer && !still && fine && !native) {
     var ticking = false;
     window.addEventListener('scroll', function(){
       if (ticking) return; ticking = true;
@@ -40,7 +44,7 @@
   if (still || !('IntersectionObserver' in window)) return;
 
   // Comparsa allo scorrimento: stessi tempi e stessa curva per tutto il sito
-  var sel = '.statement p, .sec-head, .alb, .contact .mail, .contact ul, .lede, .route-map, .ch-head, .fig, .colophon h2, .colophon dl, .copy';
+  var sel = '.statement p, .sec-head, .alb, .contact .mail, .contact ul, .lede, .map-head, .ch-head, .fig, .colophon h2, .colophon dl, .copy';
   var els = [].slice.call(document.querySelectorAll(sel));
   els.forEach(function(el){
     // elementi affiancati compaiono uno dopo l'altro
@@ -48,9 +52,6 @@
     var k = sibs.indexOf(el);
     if (k > 0) el.style.setProperty('--d', Math.min(k, 4) * (el.classList.contains('fig') || el.classList.contains('alb') ? 0.3 : 0.12) + 's');
     el.classList.add('rv');
-  });
-  document.querySelectorAll('.route-map .map-route').forEach(function(p){
-    try { p.style.setProperty('--len', Math.ceil(p.getTotalLength())); } catch(e) {}
   });
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){

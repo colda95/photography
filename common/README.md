@@ -38,7 +38,7 @@ Le pagine `index.html` sono generate: non si modificano a mano (se lo fai, vedi 
    Blocchi: `["full", foto]`, `["wide", foto]`, `["group", [foto, foto, …]]`, `["offset", principale, laterale, invertito]`.
 4. Copia `usa-2026/texts/it.json` ed `en.json` e scrivi titolo, date, introduzioni e didascalie (una per foto, con il nome del file come chiave).
 5. Aggiungi `"islanda-2027"` in `albums` dentro `common/config.json`: l'ordine è quello della home.
-6. La mappa è facoltativa: senza la cartella `map/`, la pagina esce senza mappa (e senza la riga Mappa nel colophon).
+6. Mappa (facoltativa): `python3 common/code/make_map.py islanda-2027`. Ricava le tappe dalle coordinate GPS delle foto di ogni capitolo, calcola l'area, scarica fiumi, laghi, confini e nomi delle regioni da Natural Earth e sistema le etichette perché non si accavallino. Poi si può rifinire a mano `map/route.json` (punti intermedi del percorso, posizione delle etichette, nomi di fiumi e montagne) e i testi della mappa negli `texts/*.json`. Per il rilievo serve il modello del terreno: lo script spiega come scaricarlo. Senza cartella `map/` la pagina esce senza mappa.
 7. Rigenera.
 
 ## Testi e lingue
@@ -63,6 +63,7 @@ python3 common/code/build_site.py                  # rigenera tutte le pagine
 python3 -m http.server 8000                          # anteprima su http://localhost:8000
 python3 common/code/import_texts.py usa-2026      # solo se hai corretto a mano l'HTML italiano dell'album
 python3 common/code/import_texts.py usa-2026 en   # idem per l'HTML inglese
+python3 common/code/make_map.py usa-2026 --force   # rifà da zero la mappa dell'album (perde le rifiniture a mano)
 python3 common/code/relief.py usa-2026            # ricalcola il rilievo della mappa (pip3 install numpy tifffile imagecodecs)
 ```
 

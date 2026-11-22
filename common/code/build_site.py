@@ -20,7 +20,7 @@ ROOT = os.path.dirname(COMMON)                 # cartella principale del reposit
 OUT = os.environ.get('OUT', ROOT)              # dove scrivere le pagine (di default: il repository)
 PAGE_SIZE, FULL_SIZE = '2048', '2880'          # sottocartelle di <album>/foto: foto nella pagina, foto a schermo intero
 sys.path.insert(0, HERE)
-from route_map import RouteMap
+from route_map import RouteMap, arabic
 
 def read_json(*path):
     return json.load(open(os.path.join(*path), encoding='utf-8'))
@@ -252,7 +252,7 @@ def render_album(al, lang, meta, ver):
         c = A['chapters'][ch['num']]
         chapters_html += f'''<section class="ch" id="cap-{ch["num"].lower()}">
   <header class="ch-head">
-    <p class="ch-meta"><span>{T["chapter"]} {ch["num"]}</span><span>{c["date"]}</span></p>
+    <p class="ch-meta"><span>{T["chapter"]} {arabic(ch["num"])}</span><span>{c["date"]}</span></p>
     <h2>{esc(c["title"])}</h2>
     <p class="intro">{esc(c["intro"])}</p>
   </header>
@@ -266,8 +266,10 @@ def render_album(al, lang, meta, ver):
     cameras = ', '.join(sorted({s['camera'] for s in shots if s['camera']}))
     map_html, map_row = '', ''
     if al.map:
-        kw = dict(relief_href=f'{up}{al.slug}/map/relief.png', quota_href=f'{up}{al.slug}/map/elevation.png',
-                  titles=A['map_names'], text=(A['map_description'], T['map_go']))
+        layer = lambda f: f'{up}{al.slug}/map/{f}' if os.path.exists(os.path.join(al.folder, 'map', f)) else None   # rilievo facoltativo
+        names = {**{n: c['title'] for n, c in A['chapters'].items()}, **A.get('map_names', {})}   # nomi delle tappe: titoli dei capitoli, salvo diversa indicazione
+        kw = dict(relief_href=layer('relief.png'), quota_href=layer('elevation.png'),
+                  titles=names, text=(A['map_description'], T['map_go']))
         map_html = f'''
     <figure class="route-map" id="mappa">
       <div class="map-head"><p class="kicker">{T["route_kicker"]}</p><h2 class="map-title">{A["map_title"]}</h2></div>

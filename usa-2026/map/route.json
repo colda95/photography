@@ -1,11 +1,11 @@
 {
  "area": {
-  "lon0": -116.1,
-  "lon1": -108.15,
-  "lat0": 34.95,
-  "lat1": 39.15
+  "lon0": -118.95,
+  "lon1": -105.45,
+  "lat0": 34.3,
+  "lat1": 39.7
  },
- "scale": 190,
+ "scale": 160,
  "lat_ref": 37,
  "pad": 40,
  "river_width": {
@@ -33,12 +33,12 @@
   ["Navajo Mountain", 37.03, -110.87, "relief"]
  ],
  "states": [
-  ["NEVADA", 38.45, -115.9, "start"],
+  ["NEVADA", 38.75, -117.25, "middle"],
   ["UTAH", 38.35, -111.0, "middle"],
-  ["ARIZONA", 35.45, -110.9, "middle"],
-  ["COLORADO", 38.2, -108.6, "middle"],
-  ["NEW MEXICO", 35.45, -108.6, "middle"],
-  ["CALIFORNIA", 35.1, -115.95, "start"]
+  ["ARIZONA", 34.75, -111.6, "middle"],
+  ["COLORADO", 38.75, -106.5, "middle"],
+  ["NEW MEXICO", 35.25, -106.5, "middle"],
+  ["CALIFORNIA", 35.6, -117.9, "middle"]
  ],
  "mobile_hidden_states": ["NEW MEXICO", "CALIFORNIA", "COLORADO"],
  "markers": [[37.0, -109.045, "Four Corners"]],
@@ -46,7 +46,7 @@
  "stops": [
   [36.1699, -115.1398, "Las Vegas", "", "", -16, 30, "end"],
   [36.0577, -112.1389, "Grand Canyon", "5 aprile", "I", 18, 8, "start"],
-  [36.8617, -111.3743, "Antelope Canyon", "6 aprile", "II", 16, 34, "start"],
+  [36.8617, -111.3743, "Antelope Canyon", "6 aprile", "II", -14, 34, "end"],
   [36.9386, -110.0908, "Monument Valley", "7 aprile", "III", 16, 34, "start"],
   [37.8606, -109.3756, "Blue Mountains", "7–8 aprile", "IV", -18, 6, "end"],
   [38.7013, -109.5645, "Arches", "8 aprile", "V", -16, 30, "end"],
