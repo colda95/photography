@@ -4,7 +4,8 @@ Il codice non contiene testi né dati. Struttura (vedi common/README.md):
   index.html                     home nella lingua principale (deve stare qui: è la pagina d'ingresso del sito)
   home/en/index.html             home nelle altre lingue;  home/texts/<lingua>.json  i suoi testi
   <album>/index.html             album nella lingua principale;  <album>/en/index.html  nelle altre lingue
-  <album>/photos/2048, 2880     foto nella pagina e a schermo intero
+  <album>/photos/2880/          foto originali (JPEG da 2880 px): l'unica cosa da esportare
+  <album>/photos/web/           copie WebP leggere in più misure, generate dalla build (common/code/images.py)
   <album>/texts/<lingua>.json    testi dell'album;  <album>/structure.json  capitoli e impaginazione
   <album>/map/                   mappa (facoltativa): route.json, geodata.json, relief.png, elevation.png
   common/                        stile, script, config.json, testi comuni (texts/<lingua>.json) e questo codice (code/)
@@ -18,9 +19,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 COMMON = os.path.dirname(HERE)                 # cartella common/
 ROOT = os.path.dirname(COMMON)                 # cartella principale del repository
 OUT = os.environ.get('OUT', ROOT)              # dove scrivere le pagine (di default: il repository)
-PAGE_SIZE, FULL_SIZE = '2048', '2880'          # sottocartelle di <album>/foto: foto nella pagina, foto a schermo intero
+FULL_SIZE = '2880'                             # sottocartella di <album>/photos con gli originali
 sys.path.insert(0, HERE)
 from route_map import RouteMap, arabic
+import images
 
 def read_json(*path):
     return json.load(open(os.path.join(*path), encoding='utf-8'))
@@ -58,13 +60,13 @@ class Album:
         self.map = RouteMap(mapdir) if os.path.exists(os.path.join(mapdir, 'route.json')) else None
         self.check()
 
-    def photo(self, name, size=PAGE_SIZE):
+    def photo(self, name, size=FULL_SIZE):
         """Percorso della foto, relativo alla radice del sito."""
         return f'{self.slug}/photos/{size}/{name}.jpg'
 
     def check(self):
         assert len(self.names) == len(set(self.names)), f'{self.slug}: foto duplicate'
-        for size in (PAGE_SIZE, FULL_SIZE):
+        for size in (FULL_SIZE,):
             missing = [n for n in self.names + [self.info['hero'], self.info.get('preview', self.info['hero'])] if not os.path.exists(os.path.join(ROOT, self.photo(n, size)))]
             assert not missing, f'Mancano in {self.slug}/photos/{size}: {missing}'
         folder = os.path.join(ROOT, self.slug, 'photos', FULL_SIZE)
@@ -210,6 +212,25 @@ LIGHTBOX = ('<div class="lb" id="lb" hidden><img alt=""><p class="lb-cap"></p><p
             '<script src="{up}common/album.js?v={ver}"></script>\n')
 
 
+# ---------- foto: copie leggere in più misure ----------
+WEB = {}   # originale -> [(larghezza, copia WebP)], riempito da build()
+MOBILE = '(max-width: 760px)'     # sotto questa larghezza le foto vanno una sotto l'altra (style.css)
+MAIN_W = 'min(1200px, 100vw)'     # larghezza della colonna principale
+
+def pic(src, up, sizes):
+    """Attributi src/srcset/sizes di un'immagine: il browser sceglie la copia più piccola che basta."""
+    v = WEB[src]
+    fallback = next((p for w, p in v if w >= 1600), v[-1][1])
+    return (f'src="{up}{fallback}" srcset="{", ".join(f"{up}{p} {w}w" for w, p in v)}" sizes="{sizes}"')
+
+def largest(src, up):
+    return up + WEB[src][-1][1]
+
+def cover_sizes(w, h):
+    """Foto a tutto schermo ritagliata (object-fit: cover): se lo schermo è più stretto della foto, conta l'altezza."""
+    return f'(max-aspect-ratio: {w}/{h}) {100 * w / h:.0f}vh, 100vw'
+
+
 # ---------- pagine ----------
 def render_album(al, lang, meta, ver):
     T = UI[lang]; A = al.texts(lang); year = al.info['year']
@@ -217,7 +238,7 @@ def render_album(al, lang, meta, ver):
     up = '../' * path.count('/')
     n = [0]
 
-    def fig(name, cls=''):
+    def fig(name, cls='', share=1.0):
         n[0] += 1
         title, text = A['captions'][name]
         m = meta[al.photo(name, FULL_SIZE)]
@@ -232,7 +253,8 @@ def render_album(al, lang, meta, ver):
             txt = f'{abs(la):.4f}° {"N" if la >= 0 else "S"}, {abs(lo):.4f}° {"E" if lo >= 0 else "W"}'
             parts.append(f'<a href="https://www.openstreetmap.org/?mlat={la:.5f}&amp;mlon={lo:.5f}#map=13/{la:.5f}/{lo:.5f}" target="_blank" rel="noopener" title="{T["open_map"]}"><i>{txt}</i></a>')
         where = f'<span class="where">{" · ".join(parts)}</span>' if parts else ''
-        img = (f'<img src="{up}{al.photo(name)}" data-full="{up}{al.photo(name, FULL_SIZE)}" '
+        sizes = f'{MOBILE} 100vw, {MAIN_W}' if share == 1 else f'{MOBILE} 100vw, calc({MAIN_W} * {share:.3f})'
+        img = (f'<img {pic(al.photo(name), up, sizes)} data-full="{largest(al.photo(name), up)}" '
                f'width="{m["w"]}" height="{m["h"]}" alt="{esc(title.rstrip("."))}" loading="lazy" decoding="async">')
         return (f'<figure class="fig {cls}" style="--r:{m["w"]/m["h"]:.4f}">\n'
                 f'  <button class="ph" type="button" aria-label="{T["open_full"]}: {esc(title)}">{img}</button>\n'
@@ -242,11 +264,14 @@ def render_album(al, lang, meta, ver):
     def block(b):
         k = b[0]
         if k in ('full', 'wide'): return fig(b[1], 'wide')
-        if k == 'group': return '<div class="group">' + ''.join(fig(p) for p in b[1]) + '</div>'
+        if k == 'group':
+            # nella riga ogni foto prende spazio in proporzione al suo formato (style.css: flex: var(--r))
+            r = {p: meta[al.photo(p)]['w'] / meta[al.photo(p)]['h'] for p in b[1]}
+            return '<div class="group">' + ''.join(fig(p, share=r[p] / sum(r.values())) for p in b[1]) + '</div>'
         if k == 'offset':
             main, side, rev = b[1], b[2], b[3]
             # con rev la foto laterale sta a sinistra: viene prima anche nell'ordine di lettura e nella numerazione
-            figs = [(main, 'span-main'), (side, 'side')]
+            figs = [(main, 'span-main', 8 / 12), (side, 'side', 4 / 12)]
             if rev: figs.reverse()
             return f'<div class="grid-offset{" rev" if rev else ""}">' + ''.join(fig(*f) for f in figs) + '</div>'
         raise ValueError(k)
@@ -274,6 +299,7 @@ def render_album(al, lang, meta, ver):
              f'<svg class="chnav-i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5"/></svg>'
              f'<svg class="chnav-ring" aria-hidden="true"><path/></svg></button></nav>\n') if tot > 1 else ''
     shots = [meta[al.photo(x, FULL_SIZE)] for x in al.names]
+    hm = meta[al.photo(al.info['hero'])]
     lens_order = list(CONFIG['lenses'])
     lenses = sorted({s['lens'] for s in shots}, key=lambda l: lens_order.index(l) if l in lens_order else len(lens_order))
     lens_html = '<br>'.join(CONFIG['lenses'].get(l, l) for l in lenses)
@@ -291,7 +317,7 @@ def render_album(al, lang, meta, ver):
     </figure>'''
         map_row = f'\n      <div><dt>{T["col_map"]}</dt><dd>{A["map_credit"]}</dd></div>'
     page = page_head(lang, f'{A["title"]} · {AUTHOR}', A['meta_description'], al.slug, up, ver, year) + gnav(lang, al.slug, up) + f'''<header class="cover">
-  <picture><img src="{up}{al.photo(al.info["hero"])}" alt="{esc(A["hero_alt"])}" fetchpriority="high"></picture>
+  <picture><img {pic(al.photo(al.info["hero"]), up, cover_sizes(hm["w"], hm["h"]))} alt="{esc(A["hero_alt"])}" fetchpriority="high"></picture>
   <div class="cover-text">
     <h1>{esc(A["title"])}</h1>
   </div>
@@ -323,12 +349,15 @@ def render_home(albums, lang, meta, ver):
     up = '../' * path.count('/')
     year = max(al.info['year'] for al in albums)
     cover = CONFIG['home_cover']
+    cover_dims = {k: Image.open(os.path.join(ROOT, v)).size for k, v in cover.items()}
     cards = []
-    for al in albums:
+    for k, al in enumerate(albums):
         A = al.texts(lang)
         # anteprima nella home: una foto diversa dalla copertina dell'album ("preview" in structure.json)
-        img = f'{up}{al.photo(al.info.get("preview", al.info["hero"]))}'
-        cards.append(f'''      <a class="alb" href="{href(al.slug, lang, up)}"><div class="im"><img src="{img}" alt="" loading="lazy" decoding="async"></div>'''
+        # se gli album sono dispari, il primo occupa tutta la riga (style.css)
+        wide = k == 0 and len(albums) % 2 == 1
+        img = pic(al.photo(al.info.get("preview", al.info["hero"])), up, f'{MOBILE} 100vw, {MAIN_W}' if wide else f'{MOBILE} 100vw, calc({MAIN_W} / 2)')
+        cards.append(f'''      <a class="alb" href="{href(al.slug, lang, up)}"><div class="im"><img {img} alt="" loading="lazy" decoding="async"></div>'''
                      f'''<div class="cap"><h3>{esc(A["title"])}</h3></div></a>
 ''')
     email = CONFIG.get('email')
@@ -337,8 +366,8 @@ def render_home(albums, lang, meta, ver):
     page = page_head(lang, f'{AUTHOR} · {T["home_title"]}', T['home_desc'].format(author=AUTHOR), HOME, up, ver, year) + gnav(lang, HOME, up) + f'''<main>
   <header class="cover">
     <picture>
-      <source media="(orientation: portrait)" srcset="{up}{cover["portrait"]}">
-      <img src="{up}{cover["landscape"]}" alt="{esc(T["home_alt"])}" fetchpriority="high">
+      <source media="(orientation: portrait)" srcset="{", ".join(f"{up}{p} {w}w" for w, p in WEB[cover["portrait"]])}" sizes="{cover_sizes(*cover_dims["portrait"])}">
+      <img {pic(cover["landscape"], up, cover_sizes(*cover_dims["landscape"]))} alt="{esc(T["home_alt"])}" fetchpriority="high">
     </picture>
     <div class="cover-text"><h1>{AUTHOR}</h1></div>
     <span class="cue" aria-hidden="true"></span>
@@ -367,7 +396,8 @@ def write(path, text):
 
 def build():
     albums = [Album(slug) for slug in CONFIG['albums']]
-    paths = {al.photo(n, FULL_SIZE) for al in albums for n in al.names + [al.info['hero']]}
+    paths = {al.photo(n, FULL_SIZE) for al in albums for n in al.names + [al.info['hero'], al.info.get('preview', al.info['hero'])]}
+    WEB.update(images.build(list(paths) + list(CONFIG['home_cover'].values()), ROOT))
     with ThreadPoolExecutor(8) as ex:
         meta = dict(ex.map(process, sorted(paths)))
     ver = hashlib.md5(b''.join(open(f'{COMMON}/{f}','rb').read() for f in ('style.css', 'album.js', 'site.js'))).hexdigest()[:8]

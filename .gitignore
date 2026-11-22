@@ -2,3 +2,7 @@
 __pycache__/
 *.tif
 *.tiff
+
+# foto originali: restano solo sul Mac. Sul sito vanno le copie leggere in photos/web/, generate dalla build
+*/photos/2880/
+home/photos/*.jpg
