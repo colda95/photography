@@ -92,7 +92,7 @@ class RouteMap:
             pts = [(X(r[1]) + shift.get(r[4], (0, 0))[0], Y(r[0]) + shift.get(r[4], (0, 0))[1]) for r in m.STOPS]
             pts += [(X(lo), Y(la)) for la, lo in m.ROUTE]
             x0, x1, y0, y1 = min(p[0] for p in pts), max(p[0] for p in pts), min(p[1] for p in pts), max(p[1] for p in pts)
-            margin = 0.12 * max(x1 - x0, y1 - y0) + 40
+            margin = 0.2 * max(x1 - x0, y1 - y0) + 40
             x0, x1, y0, y1 = x0 - margin, x1 + margin, y0 - margin, y1 + margin
             w, h = x1 - x0, y1 - y0
             if w / h < 1.0: x0 -= (h - w) / 2; x1 += (h - w) / 2
@@ -117,16 +117,22 @@ class RouteMap:
         tint = lambda name: (f'<filter id="map-f-{name}{sfx}" color-interpolation-filters="sRGB"><feFlood class="map-flood-{name}"/>'
                              f'<feComposite in2="SourceAlpha" operator="in"/></filter>')
         # niente cornice: rilievo, fiumi e confini sfumano verso i bordi nel colore della pagina (le scritte restano nitide)
-        fx, fy = f'map-fx{sfx}', f'map-fy{sfx}'
-        fade = lambda gid, mid, horiz, edge: (
-            f'<linearGradient id="{gid}" x1="0" y1="0" x2="{1 if horiz else 0}" y2="{0 if horiz else 1}">'
-            f'<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="{edge}" stop-color="#fff"/>'
-            f'<stop offset="{1-edge}" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
-            f'<mask id="{mid}" maskUnits="userSpaceOnUse" x="{vx}" y="{vy}" width="{vw}" height="{vh}">'
-            f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" fill="url(#{gid})"/></mask>')
+        # sfumatura morbida (curva "smoothstep"), più ampia su telefono; in più un'ellisse che spegne gli angoli,
+        # così non si vede il rettangolo dell'immagine: la mappa nasce e svanisce nel nero della pagina
+        edge = 0.3 if mobile else 0.22
+        ease = [(k / 8, (k / 8) ** 2 * (3 - 2 * k / 8)) for k in range(9)]
+        stops = lambda: ''.join(f'<stop offset="{edge*a:.3f}" stop-color="#fff" stop-opacity="{v:.3f}"/>' for a, v in ease) + \
+            ''.join(f'<stop offset="{1-edge*a:.3f}" stop-color="#fff" stop-opacity="{v:.3f}"/>' for a, v in reversed(ease))
+        mask = lambda mid, gid: (f'<mask id="{mid}" maskUnits="userSpaceOnUse" x="{vx}" y="{vy}" width="{vw}" height="{vh}">'
+                                 f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" fill="url(#{gid})"/></mask>')
+        fx, fy, fr = f'map-fx{sfx}', f'map-fy{sfx}', f'map-fr{sfx}'
         o.append(f'<defs><clipPath id="{cid}"><rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}"/></clipPath>{tint("high")}{tint("shade")}'
-                 f'{fade(fx + "g", fx, True, 0.2)}{fade(fy + "g", fy, False, 0.2)}</defs>')
-        o.append(f'<g clip-path="url(#{cid})"><g mask="url(#{fx})"><g mask="url(#{fy})">')
+                 f'<linearGradient id="{fx}g" x1="0" y1="0" x2="1" y2="0">{stops()}</linearGradient>{mask(fx, fx + "g")}'
+                 f'<linearGradient id="{fy}g" x1="0" y1="0" x2="0" y2="1">{stops()}</linearGradient>{mask(fy, fy + "g")}'
+                 f'<radialGradient id="{fr}g" cx=".5" cy=".5" r=".72">'
+                 + ''.join(f'<stop offset="{0.55 + 0.45 * a:.3f}" stop-color="#fff" stop-opacity="{1 - v:.3f}"/>' for a, v in ease)
+                 + f'</radialGradient>{mask(fr, fr + "g")}</defs>')
+        o.append(f'<g clip-path="url(#{cid})"><g mask="url(#{fx})"><g mask="url(#{fy})"><g mask="url(#{fr})">')
         if quota_href:
             o.append(f'<image href="{quota_href}" x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" preserveAspectRatio="none" class="map-high" filter="url(#map-f-high{sfx})"/>')
         if relief_href:
@@ -138,7 +144,7 @@ class RouteMap:
         for r in self.data['rivers']:
             w = m.RIVER_WIDTH.get(r['name'], 1.0) * (1.8 if mobile else 1)
             o.append(f'<path class="map-river" style="stroke-width:{w:.1f}" d="{self._path(_smooth(r["pts"]))}"/>')
-        o.append('</g></g></g>')
+        o.append('</g></g></g></g>')
         for name, la, lo, anc in m.STATES:
             if mobile and name in m.MOBILE_HIDDEN_STATES:
                 continue

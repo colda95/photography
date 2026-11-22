@@ -62,6 +62,12 @@ python3 common/code/make_map.py usa-2026 --force   # rifà da zero la mappa dell
 python3 common/code/relief.py usa-2026            # ricalcola il rilievo della mappa (pip3 install numpy tifffile imagecodecs)
 ```
 
+## Controllo dell'impaginazione
+
+Prima di pubblicare: `python3 common/code/check_layout.py`. Apre ogni pagina come la vedrebbero un iPhone (verticale e orizzontale), un tablet, un portatile e uno schermo grande, e segnala qualunque elemento esca dai bordi o testo non allineato agli altri. Serve una volta sola: `pip3 install playwright && python3 -m playwright install chromium`.
+
+Le regole che tengono l'impaginazione robusta stanno in `common/style.css`: tutte le pagine usano la stessa colonna, gli stessi stili per titoli e testi (sempre allineati a sinistra, su tutta la larghezza), e nessun elemento dentro la pagina può diventare più largo dello spazio disponibile.
+
 ## Regole da ricordare
 
 - Ogni foto usata deve esistere in `photos/2048` e in `photos/2880`: la build controlla e si ferma se ne manca una, e segnala le foto presenti ma non usate.

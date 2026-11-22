@@ -263,6 +263,16 @@ def render_album(al, lang, meta, ver):
   {"".join(block(b) for b in ch["blocks"])}
 </section>
 '''
+    # indice dei capitoli: compare in basso mentre si scorrono i capitoli (common/site.js), toccandolo si apre l'elenco
+    tot = len(al.chapters)
+    first = A['chapters'][al.chapters[0]['num']]['title'] if tot else ''
+    items = ''.join(f'<li style="--i:{k}"><a href="#chapter-{arabic(ch["num"])}"><span>{arabic(ch["num"])}</span>{esc(A["chapters"][ch["num"]]["title"])}</a></li>'
+                    for k, ch in enumerate(al.chapters))
+    chnav = (f'<nav class="chnav" aria-label="{T["chapters_nav"]}"><ol class="chnav-list" id="chnav-list">{items}</ol>'
+             f'<button class="chnav-btn" type="button" aria-expanded="false" aria-controls="chnav-list">'
+             f'<span class="chnav-n"><b>1</b> / {tot}</span><span class="chnav-t">{esc(first)}</span>'
+             f'<svg class="chnav-i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5"/></svg>'
+             f'<svg class="chnav-ring" aria-hidden="true"><path/></svg></button></nav>\n') if tot > 1 else ''
     shots = [meta[al.photo(x, FULL_SIZE)] for x in al.names]
     lens_order = list(CONFIG['lenses'])
     lenses = sorted({s['lens'] for s in shots}, key=lambda l: lens_order.index(l) if l in lens_order else len(lens_order))
@@ -304,7 +314,7 @@ def render_album(al, lang, meta, ver):
     <p class="copy"><a class="backlink more" href="{href(HOME, lang, up)}">{T["all_albums"]}</a></p>
   </footer>
 </main>
-''' + LIGHTBOX.format(rotate=T['rotate'], close=T['close'], up=up, ver=ver) + '</body>\n</html>\n'
+''' + chnav + LIGHTBOX.format(rotate=T['rotate'], close=T['close'], up=up, ver=ver) + '</body>\n</html>\n'
     write(f'{OUT}/{path}index.html', page)
 
 def render_home(albums, lang, meta, ver):
@@ -319,7 +329,7 @@ def render_home(albums, lang, meta, ver):
         # anteprima nella home: una foto diversa dalla copertina dell'album ("preview" in structure.json)
         img = f'{up}{al.photo(al.info.get("preview", al.info["hero"]))}'
         cards.append(f'''      <a class="alb" href="{href(al.slug, lang, up)}"><div class="im"><img src="{img}" alt="" loading="lazy" decoding="async"></div>'''
-                     f'''<div class="cap"><h3>{esc(A["title"])}</h3><p>{A["place"]}, {A["dates"]}<br>{T["album_count"].format(n=len(al.names))}</p></div></a>
+                     f'''<div class="cap"><h3>{esc(A["title"])}</h3></div></a>
 ''')
     email = CONFIG.get('email')
     mail = f'<a class="mail" href="mailto:{email}">{email}</a>' if email else ''

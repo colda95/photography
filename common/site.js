@@ -41,6 +41,56 @@
     }, {passive:true});
   }
 
+  // Indice dei capitoli (album): compare mentre si scorrono i capitoli e dice in quale ci si trova
+  var chnav = document.querySelector('.chnav');
+  if (chnav) {
+    var chs = [].slice.call(document.querySelectorAll('main .ch')), end = document.querySelector('.colophon');
+    var btn = chnav.querySelector('.chnav-btn'), num = chnav.querySelector('.chnav-n b'), tit = chnav.querySelector('.chnav-t');
+    var links = [].slice.call(chnav.querySelectorAll('.chnav-list a')), at = -1, queued = false;
+    var setOpen = function(on){ chnav.classList.toggle('open', on); btn.setAttribute('aria-expanded', on ? 'true' : 'false'); };
+    var update = function(){
+      queued = false;
+      var h = window.innerHeight, i = -1;
+      chs.forEach(function(c, k){ if (c.getBoundingClientRect().top <= h * 0.45) i = k; });
+      var visible = i >= 0 && (!end || end.getBoundingClientRect().top > h * 0.6);
+      chnav.classList.toggle('show', visible);
+      // avanzamento: da inizio del primo capitolo all'inizio del colophon
+      var y0 = chs[0].getBoundingClientRect().top, y1 = (end || chs[chs.length - 1]).getBoundingClientRect().top;
+      prog = Math.min(1, Math.max(0, (h * 0.45 - y0) / Math.max(1, y1 - y0)));
+      ring();
+      if (!visible) setOpen(false);
+      if (i >= 0 && i !== at) {
+        var first = at < 0; at = i;
+        links.forEach(function(a, k){ if (k === i) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+        if (first || !visible) { num.textContent = i + 1; tit.textContent = links[i].lastChild.textContent; return; }
+        // cambio di capitolo: la pillola si allarga o si stringe con calma e il nuovo titolo emerge da sfocato a nitido
+        var w0 = btn.offsetWidth;
+        num.textContent = i + 1; tit.textContent = links[i].lastChild.textContent;
+        btn.style.width = ''; var w1 = btn.offsetWidth;
+        btn.style.width = w0 + 'px'; void btn.offsetWidth; btn.style.width = w1 + 'px';
+        clearTimeout(wt); wt = setTimeout(function(){ btn.style.width = ''; }, 700);
+        tit.classList.remove('swap'); void tit.offsetWidth; tit.classList.add('swap');
+      }
+    };
+    // contorno di avanzamento: una linea ocra percorre il bordo della pillola, partendo dall'alto al centro
+    var rp = chnav.querySelector('.chnav-ring path'), prog = 0, wt;
+    var ring = function(){
+      var w = btn.offsetWidth, hh = btn.offsetHeight, q = 0.6, R = hh / 2 - q;
+      if (!w || !hh) return;
+      rp.setAttribute('d', 'M' + w/2 + ' ' + q + 'H' + (w - hh/2) + 'A' + R + ' ' + R + ' 0 0 1 ' + (w - hh/2) + ' ' + (hh - q) +
+        'H' + hh/2 + 'A' + R + ' ' + R + ' 0 0 1 ' + hh/2 + ' ' + q + 'Z');
+      var L = 2 * (w - hh) + 2 * Math.PI * R;
+      rp.style.strokeDasharray = L; rp.style.strokeDashoffset = L * (1 - prog);
+    };
+    if (window.ResizeObserver) new ResizeObserver(ring).observe(btn);
+    var later = function(){ if (!queued) { queued = true; requestAnimationFrame(update); } };
+    update(); window.addEventListener('scroll', later, {passive:true}); window.addEventListener('resize', later);
+    btn.addEventListener('click', function(){ setOpen(!chnav.classList.contains('open')); });
+    links.forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
+    document.addEventListener('click', function(e){ if (!chnav.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && chnav.classList.contains('open')) { setOpen(false); btn.focus(); } });
+  }
+
   if (still || !('IntersectionObserver' in window)) return;
 
   // Comparsa allo scorrimento: stessi tempi e stessa curva per tutto il sito
