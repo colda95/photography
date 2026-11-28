@@ -24,7 +24,7 @@ ALBUM_DIR = 'album'                            # cartella che contiene tutti gli
 CHAPTER_DIR = re.compile(r'^(\d+)(?:[-_ ].*)?$')  # cartella di un capitolo: numero, poi un nome a piacere
 sys.path.insert(0, HERE)
 from route_map import RouteMap, arabic
-import images
+import images, world_map
 
 def read_json(*path):
     return json.load(open(os.path.join(*path), encoding='utf-8'))
@@ -341,7 +341,7 @@ def render_album(al, lang, meta, ver):
         gps = al.gps[name] if name in al.gps else m['gps']
         if gps:
             la, lo = gps
-            txt = f'{abs(la):.4f}° {"N" if la >= 0 else "S"}, {abs(lo):.4f}° {"E" if lo >= 0 else "W"}'
+            txt = f'{"N" if la >= 0 else "S"} {abs(la):.4f}°, {"E" if lo >= 0 else "W"} {abs(lo):.4f}°'   # lettera prima del numero
             parts.append(f'<a href="https://www.openstreetmap.org/?mlat={la:.5f}&amp;mlon={lo:.5f}#map=13/{la:.5f}/{lo:.5f}" target="_blank" rel="noopener" title="{T["open_map"]}"><i>{txt}</i></a>')
         where = f'<span class="where">{" · ".join(parts)}</span>' if parts else ''
         sizes = f'{MOBILE} 100vw, {MAIN_W}' if share == 1 else f'{MOBILE} 100vw, calc({MAIN_W} * {share:.3f})'
@@ -436,7 +436,17 @@ def render_album(al, lang, meta, ver):
 ''' + chnav + LIGHTBOX.format(rotate=T['rotate'], close=T['close'], up=up, ver=ver) + '</body>\n</html>\n'
     write(f'{OUT}/{path}index.html', page)
 
-def render_home(albums, lang, meta, ver):
+def places_section(lang, T, world):
+    """Mappa del mondo della home (world_map.py): solo la mappa, senza titolo né didascalie."""
+    if not world:
+        return ''
+    label = esc(T['places_alt'])
+    return f'''  <section class="sec places" id="places" aria-label="{label}">
+    <figure class="world"><div class="world-scroll">{world_map.svg(ROOT, world, label=label)}</div><span class="world-cue" aria-hidden="true"></span></figure>
+  </section>
+'''
+
+def render_home(albums, lang, meta, ver, world=None):
     T = HOME_UI[lang]
     path = page_path(HOME, lang)
     up = '../' * path.count('/')
@@ -466,7 +476,7 @@ def render_home(albums, lang, meta, ver):
     <span class="cue" aria-hidden="true"></span>
   </header>
   <section class="statement"><p>{esc(T["home_sub"])}</p></section>
-  <section class="sec" id="albums">
+{places_section(lang, T, world)}  <section class="sec" id="albums">
     <div class="sec-head"><h2>{T["albums_h"]}</h2><p>{T["albums_p"]}</p></div>
     <div class="albums">
 {"".join(cards)}    </div>
@@ -496,10 +506,14 @@ def build():
     for al in albums:
         al.arrange(meta)
     ver = hashlib.md5(b''.join(open(f'{COMMON}/{f}','rb').read() for f in ('style.css', 'album.js', 'site.js'))).hexdigest()[:8]
+    # luoghi per la mappa della home: database della libreria Foto (solo sul Mac) + GPS delle foto degli album
+    extra = [meta[al.photo(n)]['gps'] for al in albums for n in al.names if meta[al.photo(n)]['gps']]
+    world = world_map.load_places(ROOT, CONFIG.get('places_db', 'places/foto_geo.sqlite'), 'home/places.json', extra)
+    print(f'mappa della home: {len(world)} luoghi')
     for lang in LANGS:
         for al in albums:
             render_album(al, lang, meta, ver)
-        render_home(albums, lang, meta, ver)
+        render_home(albums, lang, meta, ver, world)
     for al in albums:
         print(f'{al.slug}: {len(al.names)} foto, {len(al.chapters)} capitoli')
     print('lingue:', ', '.join(LANGS))

@@ -13,7 +13,7 @@ SCREENS = [('iPhone verticale', 390, 844, True), ('iPhone orizzontale', 844, 390
 JS = """() => {
   const W = document.documentElement.clientWidth, out = [];
   const clipped = el => { for (let p = el.parentElement; p; p = p.parentElement) {
-      const o = getComputedStyle(p).overflowX; if (o === 'hidden' || o === 'clip') return p !== document.body && p !== document.documentElement; } return false; };
+      const o = getComputedStyle(p).overflowX; if (['hidden', 'clip', 'auto', 'scroll'].includes(o)) return p !== document.body && p !== document.documentElement; } return false; };   // dentro un riquadro che taglia o scorre di lato (es. la mappa del mondo su telefono): va bene, il riquadro stesso viene controllato
   for (const el of document.querySelectorAll('body *')) {
     if (el.closest('svg') && el.tagName.toLowerCase() !== 'svg') continue;
     const r = el.getBoundingClientRect();

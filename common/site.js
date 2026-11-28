@@ -91,6 +91,47 @@
     document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && chnav.classList.contains('open')) { setOpen(false); btn.focus(); } });
   }
 
+  // Mappa del mondo (home): su telefono si apre centrata sull'Europa; i punti compaiono quando la mappa entra nello schermo
+  var world = document.querySelector('.world');
+  if (world) {
+    var wsc = world.querySelector('.world-scroll'), wm = world.querySelector('.world-svg');
+    var center = function(){
+      if (wm && wsc.scrollWidth > wsc.clientWidth)
+        wsc.scrollLeft = wm.getBoundingClientRect().width * parseFloat(wm.getAttribute('data-focus') || '.5') - wsc.clientWidth / 2;
+    };
+    // se la mappa è più larga dello schermo si può trascinare: compare l'indicatore, che sparisce al primo movimento
+    var drag = function(){ world.classList.toggle('drag', wsc.scrollWidth > wsc.clientWidth + 2); };
+    center(); drag();
+    var start = wsc.scrollLeft;
+    wsc.addEventListener('scroll', function(){ if (Math.abs(wsc.scrollLeft - start) > 12) world.classList.add('moved'); }, {passive: true});
+    if (window.matchMedia) window.matchMedia('(orientation: portrait)').addListener(function(){ center(); drag(); start = wsc.scrollLeft; });
+    window.addEventListener('load', function(){ if (!world.classList.contains('moved')) { center(); drag(); start = wsc.scrollLeft; } });
+    if (still || !('IntersectionObserver' in window)) world.classList.add('on');
+    else {
+      var wo = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if (e.isIntersecting) { world.classList.add('on'); wo.disconnect(); } });
+      }, {threshold: 0.2});
+      wo.observe(world);
+    }
+  }
+
+  // Foto: si scaricano in anticipo, quando sono a circa due schermate di distanza, invece di aspettare che il
+  // browser le chieda all'ultimo (Safari con loading="lazy" parte quasi sul bordo dello schermo): scorrendo veloce
+  // le foto sono già pronte quando arrivano
+  if ('IntersectionObserver' in window) {
+    var pre = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var im = e.target; pre.unobserve(im);
+        im.loading = 'eager';
+        // appena scaricata, la foto viene anche decodificata: quando arriva sullo schermo è pronta da disegnare
+        var warm = function(){ if (im.decode) im.decode().catch(function(){}); };
+        if (im.complete) warm(); else im.addEventListener('load', warm, {once: true});
+      });
+    }, {rootMargin: '200% 0px'});
+    [].forEach.call(document.querySelectorAll('img[loading="lazy"]'), function(im){ pre.observe(im); });
+  }
+
   if (still || !('IntersectionObserver' in window)) return;
 
   // Comparsa allo scorrimento: stessi tempi e stessa curva per tutto il sito
@@ -100,26 +141,36 @@
     // elementi affiancati compaiono uno dopo l'altro
     var sibs = el.parentElement ? [].slice.call(el.parentElement.children).filter(function(c){ return c.matches(sel); }) : [];
     var k = sibs.indexOf(el);
-    if (k > 0) el.style.setProperty('--d', Math.min(k, 4) * (el.classList.contains('fig') || el.classList.contains('alb') ? 0.3 : 0.12) + 's');
+    if (k > 0) el.style.setProperty('--d', Math.min(k, 4) * (el.classList.contains('fig') || el.classList.contains('alb') ? 0.15 : 0.12) + 's');
     el.classList.add('rv');
   });
+  // velocità di scorrimento: se si scorre di corsa, le cose compaiono subito invece di aspettare l'animazione intera
+  // (velocità media degli ultimi istanti, in px al millisecondo: uno scorrimento normale col trackpad resta sotto 2)
+  var lastY = window.scrollY, lastT = performance.now(), speed = 0;
+  window.addEventListener('scroll', function(){
+    var t = performance.now(), y = window.scrollY, dt = Math.max(t - lastT, 1);
+    speed = speed * 0.6 + Math.abs(y - lastY) / dt * 0.4; lastY = y; lastT = t;
+  }, {passive: true});
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){
       if (!e.isIntersecting) return;
       var el = e.target; io.unobserve(el);
+      if (speed > 4 && performance.now() - lastT < 100) el.classList.add('quick');   // oltre 4000 px al secondo: si sta correndo
       var show = function(){
         if (el.classList.contains('in')) return;
         el.classList.add('in');
         // a comparsa finita, l'elemento torna normale (così le reazioni al puntatore restano quelle di sempre)
-        setTimeout(function(){ el.classList.remove('rv', 'in'); el.style.removeProperty('--d'); }, 7000);
+        setTimeout(function(){ el.classList.remove('rv', 'in', 'quick'); el.style.removeProperty('--d'); }, 7000);
       };
-      // una foto compare solo quando è caricata: niente immagini che spuntano a metà animazione
+      // una foto compare quando è caricata; se tarda, dopo poco compare comunque (le copie sono JPEG progressivi:
+      // si disegnano man mano che arrivano, invece di lasciare un riquadro nero)
       var im = (el.classList.contains('fig') || el.classList.contains('alb')) && el.querySelector('img');
       if (!im || (im.complete && im.naturalWidth)) { requestAnimationFrame(show); return; }
+      im.loading = 'eager';
       im.addEventListener('load', function(){ requestAnimationFrame(show); }, {once:true});
       im.addEventListener('error', show, {once:true});
-      setTimeout(show, 4000);
+      setTimeout(show, el.classList.contains('quick') ? 250 : 700);
     });
-  }, {rootMargin:'0px 0px -8% 0px', threshold:0.08});
+  }, {rootMargin:'0px 0px -6% 0px', threshold:0});   // parte quando l'elemento è entrato nello schermo: l'animazione si vede
   els.forEach(function(el){ io.observe(el); });
 })();

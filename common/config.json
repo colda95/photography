@@ -23,5 +23,6 @@
   "RF100-400mm F5.6-8 IS USM": "RF 100–400 mm f/5.6–8 IS USM",
   "RF-S18-150mm F3.5-6.3 IS STM": "RF-S 18–150 mm f/3.5–6.3 IS STM",
   "Canon RF-S18-150mm F3.5-6.3 IS STM": "RF-S 18–150 mm f/3.5–6.3 IS STM"
- }
+ },
+ "places_db": "places/foto_geo.sqlite"
 }

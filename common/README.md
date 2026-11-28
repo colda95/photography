@@ -71,6 +71,15 @@ Prima di pubblicare: `python3 common/code/check_layout.py`. Apre ogni pagina com
 
 Le regole che tengono l'impaginazione robusta stanno in `common/style.css`: tutte le pagine usano la stessa colonna, gli stessi stili per titoli e testi (sempre allineati a sinistra, su tutta la larghezza), e nessun elemento dentro la pagina può diventare più largo dello spazio disponibile.
 
+## Mappa dei luoghi (home)
+
+La home mostra, sotto la frase d'apertura, una mappa del mondo a puntini con i posti in cui ho fotografato (`common/code/world_map.py`). È statica: quando compare, parte dal nero e un'onda invisibile che nasce da Roma (`ORIGIN`) la scopre, con i puntini dei luoghi che si accendono al suo passaggio.
+- I luoghi vengono da `places/foto_geo.sqlite`, creato da `places/foto_geo.py` a partire dalla libreria Foto, più le coordinate GPS delle foto degli album. Per aggiornarli: `python3 places/foto_geo.py sync`, poi rigenera il sito.
+- La terra è una griglia di puntini grigi, uno ogni `DOT_KM` km (85); si accendono in ocra quelli entro `LIT_KM` km (80) da un luogo. Ogni luogo accende comunque il puntino più vicino, così restano visibili anche isole piccole e coste frastagliate (Creta, Kuwait…).
+- La mappa mostra solo l'area dei luoghi, che stanno sempre nella parte nitida, fuori dalle sfumature dei bordi (`PAD_DEG`, `CLEAR`, `EDGE_X`, `EDGE_Y`): con luoghi nuovi si allarga da sola. Su telefono è più alta, si scorre di lato, si apre centrata sull'Europa e mostra sotto una linea animata che invita a trascinarla.
+- Privacy: prima di disegnare, ogni luogo viene arrotondato a una griglia di 10 km (`GRID_KM`), così nella pagina non finiscono coordinate esatte; le date non si usano. Su GitHub va solo `home/places.json` (i luoghi arrotondati); la cartella `places/` resta solo sul Mac (`.gitignore`). Se il database non c'è, la build usa `home/places.json`.
+- La terra viene da `common/world.json` (Natural Earth 1:50m, pubblico dominio, semplificata).
+
 ## Regole da ricordare
 
 - Compaiono sul sito tutte e sole le foto nelle cartelle dei capitoli. Una cartella che non inizia con un numero viene ignorata, e la build lo segnala.

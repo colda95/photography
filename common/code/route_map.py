@@ -103,9 +103,9 @@ class RouteMap:
         o.append(f'<rect x="{PAD}" y="{PAD}" width="{W-2*PAD}" height="{H-2*PAD}" class="map-land"/>')
         if not mobile:
             for lon in lons:
-                o.append(f'<text x="{X(lon)+4:.1f}" y="{H-PAD-6}" class="map-deg">{abs(lon)}° {"W" if lon < 0 else "E"}</text>')
+                o.append(f'<text x="{X(lon)+4:.1f}" y="{H-PAD-6}" class="map-deg">{"W" if lon < 0 else "E"} {abs(lon)}°</text>')
             for lat in lats:
-                o.append(f'<text x="{W-PAD-4}" y="{Y(lat)-5:.1f}" class="map-deg" text-anchor="end">{abs(lat)}° {"N" if lat >= 0 else "S"}</text>')
+                o.append(f'<text x="{W-PAD-4}" y="{Y(lat)-5:.1f}" class="map-deg" text-anchor="end">{"N" if lat >= 0 else "S"} {abs(lat)}°</text>')
         for lon in lons:
             o.append(f'<line x1="{X(lon):.1f}" y1="{PAD}" x2="{X(lon):.1f}" y2="{H-PAD}" class="map-grid"/>')
         for lat in lats:
