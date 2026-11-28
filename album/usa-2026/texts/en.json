@@ -1,0 +1,370 @@
+{
+ "title": "Terra rossa",
+ "place": "Arizona, Utah and Nevada",
+ "dates": "April 5–11, 2026",
+ "hero_alt": "US-163 running toward Monument Valley in the last light of day",
+ "cover_alt": "Sunrise over the Bryce Canyon amphitheater",
+ "lede": "A week in the American Southwest, from Route 66 to the Las Vegas sign. Sandstone, endless straight roads, grazing animals and far too many pre-dawn alarms.",
+ "meta_description": "A week in the American Southwest, from the canyons to the Las Vegas sign. Sandstone, endless straight roads, grazing animals and far too many pre-dawn alarms.",
+ "footer_copy": [
+  "© 2026 Dario Coluzzi. All rights reserved. No photographs or text may be reproduced without written permission."
+ ],
+ "map_title": "Nine stops, three states",
+ "map_description": "Map of the route through Nevada, Arizona and Utah, with the stops numbered like the chapters",
+ "map_credit": "Rivers, lakes and borders: Natural Earth<br>Terrain altimetry: NASA SRTM, via OpenTopography",
+ "map_names": {
+  "1": "Grand Canyon",
+  "2": "Antelope Canyon",
+  "3": "Monument Valley",
+  "4": "Blue Mountains",
+  "5": "Arches",
+  "6": "Bryce Canyon",
+  "7": "The Ranch",
+  "8": "Zion"
+ },
+ "chapters": {
+  "1": {
+   "title": "Grand Canyon",
+   "date": "April 5, 2026",
+   "intro": "We leave Las Vegas on Route 66, because of course we do, and by mid-afternoon we’re standing on the South Rim of the Grand Canyon. From the railing there’s nothing to give it scale; only the bands of rock make any sense of it. That’s where the trip’s first real jaw-drop happens."
+  },
+  "2": {
+   "title": "Antelope Canyon and Horseshoe Bend",
+   "date": "April 6, 2026",
+   "intro": "Two sides of the same sandstone: deep underground in the slot of Upper Antelope Canyon, then perched high above the Colorado River at Horseshoe Bend, right up to the evening’s last thunderstorm. Cue the Indiana Jones theme."
+  },
+  "3": {
+   "title": "Monument Valley",
+   "date": "April 7, 2026",
+   "intro": "US-163 crosses from Arizona into Utah and drops you straight into a western: cattle grazing, horses roaming free, and the great sandstone buttes still standing where everything around them has worn away. This is the sky Wile E. Coyote has been chasing the Road Runner under for 77 years."
+  },
+  "4": {
+   "title": "Blue Mountains",
+   "date": "April 7–8, 2026",
+   "intro": "A night in a dome outside Monticello under a sky thick with stars, then an early start, long lens at the ready for whoever lives in the juniper woods."
+  },
+  "5": {
+   "title": "Arches",
+   "date": "April 8, 2026",
+   "intro": "Over two thousand documented stone arches in a single park, with the snow-capped La Sal Mountains on the horizon. And that evening, the drive west turns out to be something words can’t quite cover."
+  },
+  "6": {
+   "title": "Bryce Canyon",
+   "date": "April 9, 2026",
+   "intro": "Up before dawn to watch the sun pour into the amphitheater, then a walk along the rim and a drive down the scenic road to the rock windows at the southern end."
+  },
+  "7": {
+   "title": "The Ranch",
+   "date": "April 9–10, 2026",
+   "intro": "Two nights on a ranch east of Zion: pastures, old-time wagons and a herd of bison happy to let you get close when the light turns soft."
+  },
+  "8": {
+   "title": "Zion",
+   "date": "April 10–11, 2026",
+   "intro": "Utah’s busiest national park, seen mostly through the eyes of its locals: chipmunks, bighorn sheep, deer in the brush. And the river that carved the whole thing."
+  },
+  "9": {
+   "title": "Into Las Vegas",
+   "date": "April 11, 2026",
+   "intro": "The last day is mostly road. Interstate 15 clips the northwest corner of Arizona, crosses into Nevada and runs right up to the most famous sign in Las Vegas."
+  }
+ },
+ "captions": {
+  "20260405-3W9A6381": [
+   "First look.",
+   "Mid-afternoon light is harsh, and the canyon reads in layers: terraces up front, red walls behind, the North Rim dissolving into haze."
+  ],
+  "20260405-3W9A6401": [
+   "Layer cake.",
+   "A long lens flattens the canyon: walls, terraces and side gorges collapse into one pattern of horizontal lines."
+  ],
+  "20260405-3W9A6475": [
+   "Deep time.",
+   "The rock layers you see from the rim span nearly two billion years of geology, stacked like pages in a book."
+  ],
+  "20260405-3W9A6419": [
+   "Mules first.",
+   "At the South Kaibab trailhead, a sign makes clear who’s boss: when the mules come through, do what the wrangler tells you."
+  ],
+  "20260405-3W9A6450": [
+   "The star.",
+   "A rock squirrel strikes a pose. Shutter, immediately."
+  ],
+  "20260405-3W9A6512": [
+   "The local.",
+   "A closer portrait, the background melting into the canyon’s own colors."
+  ],
+  "20260405-3W9A6473": [
+   "The wall.",
+   "Limestone in the foreground, the canyon fading into haze behind it."
+  ],
+  "20260405-3W9A6590-HDR": [
+   "First sunset.",
+   "At 6:34 pm the low sun catches only the tops of the terraces. A long, skinny panorama, to fit in every last bit of light."
+  ],
+  "20260406-3W9A6754-HDR": [
+   "Inside the rock.",
+   "Light slips in through a crack overhead and ricochets off walls polished smooth by flash floods. The color shifts every few feet: orange where the sun hits, violet where it can’t reach."
+  ],
+  "20260406-3W9A6720": [
+   "Looking up.",
+   "Light spills down through the slot and traces the grain of the rock, layer by layer."
+  ],
+  "20260406-3W9A6794-HDR": [
+   "Rock waves.",
+   "Those swirls in the sandstone are dunes turned to stone, left by a desert some two hundred million years ago."
+  ],
+  "20260406-3W9A6814-HDR": [
+   "Canyon floor.",
+   "Cracks overhead light the path, while the sand on the floor bounces light back up and brightens the walls from below."
+  ],
+  "20260406-3W9A6861-2": [
+   "Shaft of light.",
+   "A visitor stops in the one sunlit spot in the canyon and looks up. In black and white, all that’s left is light and the shape of the rock."
+  ],
+  "20260406-3W9A6974-HDR": [
+   "Horseshoe Bend.",
+   "The Colorado traces its horseshoe about a thousand feet below the rim. Even a wide-angle lens struggles to take in the whole bend, from the cliff edge down to the water. Those tiny boats at the bottom give you a sense of scale."
+  ],
+  "20260406-3W9A6981": [
+   "Downstream.",
+   "Past the bend, the river heads on toward the Grand Canyon, a ribbon of green along its banks."
+  ],
+  "20260406-3W9A7060": [
+   "Sunset storm.",
+   "At 6:54 pm the sun finds a gap under the clouds, and for a few seconds the whole horizon goes up in flames."
+  ],
+  "20260407-3W9A7076": [
+   "Welcome to Utah.",
+   "Cross the state line on US-163 and the sign promises “Life Elevated.”"
+  ],
+  "20260407-3W9A7083": [
+   "And back to Arizona.",
+   "Heading the other way, the Grand Canyon State says hello."
+  ],
+  "20260407-3W9A7089": [
+   "The buttes.",
+   "Sandstone towers rising out of red sand, under a sky with barely a cloud in it."
+  ],
+  "20260407-3W9A7127": [
+   "Dead juniper.",
+   "A bleached trunk in the foreground and, behind it, one of the Mittens, the most recognizable silhouette in the valley."
+  ],
+  "20260407-3W9A7145": [
+   "Wildflowers.",
+   "In April the sand is carpeted with low, dense white and purple flowers. Lucky timing."
+  ],
+  "20260407-3W9A7153": [
+   "Grazing with a view.",
+   "Hereford cattle graze among the scrub while a line of mesas stretches across the whole horizon."
+  ],
+  "20260407-3W9A7154": [
+   "The pale horse.",
+   "A horse grazes among dry grass and purple flowers. Further up the slope, tiny as specks, the rest of the herd does the same."
+  ],
+  "20260407-3W9A7168": [
+   "Totem Pole.",
+   "The slender spire of the Totem Pole alongside the Yei Bi Chei formations. Down below, cattle rest in the shade of a juniper."
+  ],
+  "20260407-3W9A7175": [
+   "Totem Pole, up close.",
+   "At 105 mm the spires pull away from the cliff behind them. The thinnest one tops out at over a hundred meters."
+  ],
+  "20260407-3W9A7183": [
+   "Framed in stone.",
+   "A lone tree between two rock walls, with buttes in the distance."
+  ],
+  "20260407-3W9A7180": [
+   "Open valley.",
+   "The valley floor in mid-afternoon: sand, scrub, buttes and a sky straight out of a cartoon."
+  ],
+  "20260407-3W9A7364-HDR": [
+   "Last light.",
+   "Half an hour later, same road: the low sun warms the grass and the buttes turn lilac."
+  ],
+  "20260407-3W9A7333-HDR": [
+   "Forrest Gump Point.",
+   "The spot on US-163 where Forrest finally stops running. I’d always wondered how people get this shot. Turns out you have to do some running yourself, darting between the shoulder and the center line to dodge traffic. I spent a couple of hours at it and loved every minute."
+  ],
+  "20260408-3W9A7399": [
+   "Daybreak.",
+   "At 6:58 am the first light hits only the white house, in a sea of junipers still in shadow."
+  ],
+  "20260407-3W9A7388": [
+   "Night.",
+   "10:32 pm, in the middle of nowhere: the sky fills with stars above trees lit by the campfire."
+  ],
+  "20260408-3W9A7575": [
+   "Mule deer.",
+   "Early morning in the brush, a mule deer pauses for a look before slipping back into the trees."
+  ],
+  "20260408-3W9A7595": [
+   "Park Avenue.",
+   "Sandstone walls lined up like skyscrapers along a city avenue."
+  ],
+  "20260408-3W9A7600": [
+   "Balancing act.",
+   "Meet Queen Nefertiti Rock: a stone head perched on a slender neck, a dead ringer for the famous bust of the Egyptian queen."
+  ],
+  "20260408-3W9A7608": [
+   "Lizard.",
+   "Perfectly still in the sun, and almost the same color as the rock."
+  ],
+  "20260408-3W9A7604": [
+   "The flats.",
+   "Wide stretches of pale sandstone, with rows of red pinnacles at the back."
+  ],
+  "20260408-3W9A7610": [
+   "Balanced Rock and the La Sals.",
+   "Balanced Rock on the left, with the snowy La Sal Mountains behind."
+  ],
+  "20260408-3W9A7622": [
+   "Balanced Rock.",
+   "The boulder on top weighs over 3,200 tons and looks like someone just set it there."
+  ],
+  "20260408-3W9A7624": [
+   "Snow over the desert.",
+   "The La Sal Mountains, topping out near 3,900 meters, rise above the line of red rock. A striking contrast."
+  ],
+  "20260408-3W9A7626": [
+   "Pinnacles.",
+   "Spires and towers of rock, with the snowy peaks just peeking out behind."
+  ],
+  "20260408-3W9A7627": [
+   "Turret Arch.",
+   "The tower and its arch, in the Windows Section."
+  ],
+  "20260408-3W9A7628": [
+   "Under the arch.",
+   "A rock bridge seen from below, floating in the blue."
+  ],
+  "20260408-3W9A7636": [
+   "Fins.",
+   "Upright slabs of sandstone, known as fins. Given enough time, this is where arches are born."
+  ],
+  "20260408-3W9A7647": [
+   "Salt Valley.",
+   "An ancient salt bed lies beneath this valley. As it dissolved, the sandstone above slumped and cracked, and those cracks became fins, and eventually arches."
+  ],
+  "20260408-3W9A7649": [
+   "Delicate Arch.",
+   "Utah’s icon, small against a horizon of slickrock."
+  ],
+  "20260408-3W9A7651": [
+   "Silhouette.",
+   "On the road to Bryce at 7:37 pm, a deer stops on the ridge, backlit by the sunset."
+  ],
+  "20260408-3W9A7660": [
+   "Pines at sunset.",
+   "Twenty minutes later, the sky catches fire behind a row of pines."
+  ],
+  "20260409-3W9A7813-HDR": [
+   "Amphitheater.",
+   "At 7:07 am the sun clears the horizon and lights up the hoodoos, rock spires sculpted by endless cycles of freeze and thaw."
+  ],
+  "20260409-3W9A7816": [
+   "Sunrise, continued.",
+   "A few seconds later, the light reaches deeper into the spires."
+  ],
+  "20260409-3W9A7868": [
+   "Panorama.",
+   "The whole amphitheater in one sweep, at 7:13 am."
+  ],
+  "20260409-3W9A7892": [
+   "Beyond the rim.",
+   "By mid-morning you can see plateau after plateau from the rim, all the way to the horizon."
+  ],
+  "20260409-3W9A8120": [
+   "Castle.",
+   "A lone hoodoo, with smaller spires lined up behind it."
+  ],
+  "20260409-3W9A8134": [
+   "Worn away.",
+   "In this part of the park, time has already ground the spires down, leaving nothing but slopes of red and white rubble."
+  ],
+  "20260409-3W9A8143": [
+   "City of stone.",
+   "Thousands of hoodoos packed together like a city seen from the air."
+  ],
+  "20260409-3W9A8148": [
+   "Windows in the wall.",
+   "Further south along the scenic drive, the cliffs are pocked with small caves."
+  ],
+  "20260409-3W9A8157": [
+   "Natural Bridge.",
+   "An arch carved by rain and frost, with forest showing through the gap."
+  ],
+  "20260409-3W9A8247": [
+   "Horse Rides.",
+   "The ranch sign points the way to the trail rides."
+  ],
+  "20260409-3W9A8198": [
+   "Garden.",
+   "Seedlings in pots, waiting for spring to show up for real."
+  ],
+  "20260409-3W9A8251": [
+   "Pasture at sunset.",
+   "The ranch meadow at 7:33 pm, an old piece of farm machinery rusting in the grass."
+  ],
+  "20260410-3W9A8319": [
+   "The herd.",
+   "8 am, and the bison are spread out across the meadow, grazing."
+  ],
+  "20260410-3W9A8337": [
+   "The wagon.",
+   "An old covered wagon, minus its cover, resting by the fence."
+  ],
+  "20260410-3W9A8525": [
+   "On the move.",
+   "One bison ambles across the meadow while the rest of the herd keeps eating."
+  ],
+  "20260410-3W9A8531": [
+   "Face to face.",
+   "At 400 mm, a stare straight down the lens. Late-afternoon light sets the fur on its back aglow."
+  ],
+  "20260410-3W9A8624": [
+   "Ranch sunset.",
+   "The sun drops behind the hills, stretching long shadows across the pasture."
+  ],
+  "20260410-3W9A8632": [
+   "Backlit.",
+   "Shot from down low through the grass, the same sun turns into a starburst."
+  ],
+  "20260410-3W9A8662": [
+   "Last ride.",
+   "A cowboy rides home across the pasture as the sun sinks behind the pines."
+  ],
+  "20260410-3W9A8400": [
+   "Chipmunk.",
+   "A chipmunk on a sandstone boulder, at 400 mm."
+  ],
+  "20260410-3W9A8424": [
+   "Snack break.",
+   "Lunch clutched in both paws, eyes always on the lookout."
+  ],
+  "20260410-3W9A8472": [
+   "Bighorn.",
+   "A desert bighorn sheep on a sandstone ledge. The park brought them back in the 1970s."
+  ],
+  "20260411-3W9A8691": [
+   "The Virgin River.",
+   "The river that carved Zion Canyon, green and calm beneath the red cliffs."
+  ],
+  "20260411-3W9A8732": [
+   "Through the branches.",
+   "A mule deer browses in the undergrowth, all but invisible."
+  ],
+  "20260411-3W9A8750": [
+   "Arizona, again.",
+   "I-15 dips back into Arizona for less than thirty miles, winding through the Virgin River Gorge."
+  ],
+  "20260411-3W9A8757": [
+   "Nevada.",
+   "Soon after, the trip’s last state line."
+  ],
+  "20260411-3W9A8771": [
+   "Welcome to Fabulous Las Vegas.",
+   "6:17 pm: the 1959 sign that tells you you’ve arrived. End of the trip. Maybe."
+  ]
+ }
+}

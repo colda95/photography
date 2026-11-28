@@ -7,7 +7,10 @@
   "en"
  ],
  "albums": [
-  "usa-2026"
+  "usa-2026",
+  "piedmont",
+  "lazio",
+  "airshows"
  ],
  "home_cover": {
   "landscape": "home/photos/landscape.jpg",
@@ -17,6 +20,8 @@
  "lenses": {
   "16mm F1.4 DC DN | Contemporary 017": "Sigma 16 mm f/1.4 DC DN Contemporary",
   "RF24-105mm F4 L IS USM": "RF 24–105 mm f/4L IS USM",
-  "RF100-400mm F5.6-8 IS USM": "RF 100–400 mm f/5.6–8 IS USM"
+  "RF100-400mm F5.6-8 IS USM": "RF 100–400 mm f/5.6–8 IS USM",
+  "RF-S18-150mm F3.5-6.3 IS STM": "RF-S 18–150 mm f/3.5–6.3 IS STM",
+  "Canon RF-S18-150mm F3.5-6.3 IS STM": "RF-S 18–150 mm f/3.5–6.3 IS STM"
  }
 }

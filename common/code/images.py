@@ -1,6 +1,6 @@
 """Versioni leggere delle foto per il web.
 
-L'unico originale di ogni foto è il JPEG da 2880 px (per gli album: <album>/photos/2880/).
+L'unico originale di ogni foto è il JPEG da 2880 px (per gli album: <album>/photos/<capitolo>/).
 Da lì la build ricava da sola una serie di copie in più larghezze, nella cartella web/ accanto
 (per gli album: <album>/photos/web/<nome>-<larghezza>.jpg). Il browser sceglie la più piccola che
 basta per lo schermo.
@@ -21,9 +21,9 @@ QUALITY = 90                             # qualità JPEG delle copie ridotte
 
 
 def web_dir(src):
-    """Cartella delle copie: <album>/photos/2880/x.jpg -> <album>/photos/web/; home/photos/x.jpg -> home/photos/web/."""
+    """Cartella delle copie: <album>/photos/<capitolo>/x.jpg -> <album>/photos/web/; home/photos/x.jpg -> home/photos/web/."""
     d = os.path.dirname(src)
-    return os.path.join(os.path.dirname(d) if os.path.basename(d).isdigit() else d, 'web')
+    return os.path.join(os.path.dirname(d) if os.path.basename(os.path.dirname(d)) == 'photos' else d, 'web')
 
 
 def plan(src):

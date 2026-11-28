@@ -1,0 +1,231 @@
+{
+ "title": "Note piemontesi",
+ "place": "Piedmont, Italy",
+ "dates": "2024–2026",
+ "hero_alt": "Larches turned orange along a mountain stream in Valle Argentera",
+ "cover_alt": "The pyramid of Monviso behind bare branches at sunset",
+ "lede": "Notes from Piedmont, through the seasons: the hill above Turin, the gardens and woods of the Savoy kings, a valley of golden larches and the high plateau of the Gran Paradiso.",
+ "meta_description": "Piedmont through the seasons: the Maddalena hill above Turin, Venaria Reale in blossom, the La Mandria park, the larches of Valle Argentera and the Nivolet plateau.",
+ "footer_copy": [],
+ "chapters": {
+  "1": {
+   "title": "La Maddalena",
+   "date": "January 2024 – October 2026",
+   "intro": "The highest point of the hill that rises behind Turin. From up here the city is a grid in the haze, the Alps run along the whole horizon and, on clear evenings, Monviso stands alone to the south-west."
+  },
+  "2": {
+   "title": "Venaria Reale",
+   "date": "March 29, 2025",
+   "intro": "The gardens of the Savoy royal residence at the end of March, when the orchards burst into pink and white and the mountains behind still wear their snow."
+  },
+  "3": {
+   "title": "La Mandria",
+   "date": "October – November 2026",
+   "intro": "Once the hunting estate of the Savoy kings, now a walled park on the edge of the city: meadows, old oaks and a river, with deer and herons for anyone willing to wait."
+  },
+  "4": {
+   "title": "Valle Argentera",
+   "date": "November 1, 2025",
+   "intro": "A side valley high above Sauze di Cesana, at the moment the larches turn. The first snow on the ground, the stream running clear over the rocks and the whole slope on fire."
+  },
+  "5": {
+   "title": "Gran Paradiso",
+   "date": "September 2024 – August 2025",
+   "intro": "The Nivolet plateau, on the edge of Italy's oldest national park: high pastures, a stream winding across the meadow and peaks of grey and red rock."
+  }
+ },
+ "captions": {
+  "20240127-3W9A3254": [
+   "Monviso.",
+   "The pyramid of the mountain at sunset, framed by bare branches, a bird on the twig."
+  ],
+  "20240127-3W9A3271": [
+   "The Alps over the city.",
+   "Turin in the winter haze, the mountains standing above it."
+  ],
+  "20240127-3W9A3272": [
+   "The grid.",
+   "The straight streets of Turin, laid out like a chessboard down to the foot of the mountains."
+  ],
+  "20240127-3W9A3323": [
+   "Last leaf.",
+   "One oak leaf, lit from behind, still holding on in January."
+  ],
+  "20240127-3W9A3325": [
+   "Rings.",
+   "The low sun picks out every crack in an old stump."
+  ],
+  "20240127-3W9A3326": [
+   "Found object.",
+   "A small enamelled stone left in the centre of the stump."
+  ],
+  "20240127-3W9A3327": [
+   "Silk.",
+   "A strand of spider silk shining between two splinters of wood."
+  ],
+  "20240127-3W9A3328": [
+   "Bark.",
+   "Moss and rotting wood at macro distance, the evening blurred behind."
+  ],
+  "20250316-3W9A3888-Enhanced-NR": [
+   "Dry leaves.",
+   "Brown leaves still hanging on the branches at the end of winter."
+  ],
+  "20261017-3W9A0644": [
+   "Fir.",
+   "The needles of a fir branch on the hilltop."
+  ],
+  "20261017-3W9A0654": [
+   "October.",
+   "Beech leaves turning yellow, one by one."
+  ],
+  "20250329-3W9A4030": [
+   "Blossom season.",
+   "The orchards in flower below the woods, the mountains still snowy."
+  ],
+  "20250329-3W9A4117": [
+   "Bee.",
+   "A bee at work among the double flowers of an ornamental cherry."
+  ],
+  "20250329-3W9A4175": [
+   "White.",
+   "A tree covered in small white flowers against the blue."
+  ],
+  "20250329-3W9A4178": [
+   "Peach blossom.",
+   "Pink flowers on bare branches, against a clear March sky."
+  ],
+  "20250329-3W9A4181": [
+   "Busy.",
+   "Another bee on the peach flowers, buds still waiting to open."
+  ],
+  "20250329-3W9A4203": [
+   "On the trunk.",
+   "A single flower growing straight out of the bark."
+  ],
+  "20261011-3W9A0610": [
+   "Late flowers.",
+   "White asters in the long grass of the meadow, in October."
+  ],
+  "20261011-3W9A0626": [
+   "Sunset over the park.",
+   "The mountains in silhouette beyond the old trees of the meadow."
+  ],
+  "20261011-3W9A0637": [
+   "The river.",
+   "The last light reflected in the water between the trees."
+  ],
+  "20261101-3W9A0663": [
+   "November.",
+   "The great meadow, the woods turning and cloud on the mountains."
+  ],
+  "20261101-3W9A0667": [
+   "Egret.",
+   "A white speck in the middle of the meadow."
+  ],
+  "20261101-3W9A0688": [
+   "Walk.",
+   "Two people walking under a tunnel of trees."
+  ],
+  "20261101-3W9A0712": [
+   "After the rain.",
+   "Drops on the leaves of a locust tree."
+  ],
+  "20261101-3W9A0721": [
+   "Drops.",
+   "Every leaflet holding its own row of water beads."
+  ],
+  "20261101-3W9A0724": [
+   "Deer.",
+   "A deer crossing the meadow at the edge of the autumn wood."
+  ],
+  "20261101-3W9A0773": [
+   "Heron.",
+   "A grey heron standing still in the meadow, the wood dark behind."
+  ],
+  "20251101-3W9A5613_1": [
+   "Into the larches.",
+   "The path enters the wood, the ground covered in orange needles."
+  ],
+  "20251101-3W9A5614_1": [
+   "The road up.",
+   "A wet road through the larches, the first snow on the verges."
+  ],
+  "20251101-3W9A5627": [
+   "Needles and ice.",
+   "Larch needles and grains of melting snow."
+  ],
+  "20251101-3W9A5630_1": [
+   "Stream.",
+   "The torrent runs low between banks of golden larches."
+  ],
+  "20251101-3W9A5656_1": [
+   "Cones.",
+   "Larch cones on a bare twig, the valley blurred behind."
+  ],
+  "20251101-3W9A5744_1": [
+   "First snow.",
+   "A lone larch on the snowy meadow, the peaks white above."
+  ],
+  "20251101-3W9A5754_1": [
+   "Above the wood.",
+   "Fresh snow on the summit, the larches orange below."
+  ],
+  "20251101-3W9A5759_1": [
+   "Rock.",
+   "A close look at the green and grey stone of the mountain."
+  ],
+  "20251101-3W9A5766": [
+   "Reflection.",
+   "A still pool doubles the autumn slope and the sky."
+  ],
+  "20251101-3W9A5779_1": [
+   "Turquoise.",
+   "The stream pools under a rock ledge, the water glacier blue."
+  ],
+  "20251101-3W9A5780_1": [
+   "Valley floor.",
+   "Larches on both banks of the stream, the peaks in the light."
+  ],
+  "20251101-3W9A5791_1": [
+   "Old hut.",
+   "The stone walls of an abandoned shepherd's hut among the larches."
+  ],
+  "20251101-3W9A5794_1": [
+   "The whole slope.",
+   "A mountainside covered in larches, every one of them orange."
+  ],
+  "20240915-3W9A3472": [
+   "Chapel.",
+   "A small chapel on a grassy spur above the valley."
+  ],
+  "20240915-3W9A3480": [
+   "Ridges.",
+   "The serrated crests of the park, the forest in shadow below."
+  ],
+  "20240915-3W9A3482": [
+   "Last snow.",
+   "A patch of old snow survives in the shade of the summit."
+  ],
+  "20250831-3W9A5553": [
+   "High pasture.",
+   "Golden grass and a rocky ridge under the late-summer sky."
+  ],
+  "20250831-3W9A5572": [
+   "Fireweed.",
+   "Pink flowers in the meadow, the plateau out of focus behind."
+  ],
+  "20250831-3W9A5581": [
+   "Walkers.",
+   "Tiny figures on the skyline, cloud rising behind the ridge."
+  ],
+  "20250831-3W9A5585": [
+   "The track.",
+   "A gravel track between slopes of fireweed, red and grey peaks ahead."
+  ],
+  "20250831-3W9A5588": [
+   "Meanders.",
+   "The stream winds across the plateau, a walker for scale."
+  ]
+ }
+}

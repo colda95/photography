@@ -3,7 +3,7 @@
 Uso:  python3 common/code/make_map.py <album>              es.  python3 common/code/make_map.py islanda-2027
       python3 common/code/make_map.py <album> --force      ricrea anche route.json se esiste già
 
-Cosa fa, nella cartella <album>/map/:
+Cosa fa, nella cartella album/<album>/map/:
   route.json    tappe (una per capitolo, nella posizione media delle sue foto con GPS), percorso che le unisce
                 nell'ordine dei capitoli, area e scala della mappa, nomi di stati e regioni. Se esiste già, non lo tocca
                 (a meno di --force): così le correzioni fatte a mano restano.
@@ -121,8 +121,9 @@ def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     if not args:
         sys.exit(__doc__)
-    slug, force = args[0], '--force' in sys.argv
-    al = B.Album(slug)
+    force = '--force' in sys.argv
+    al = B.Album(args[0])
+    slug = al.slug
     mapdir = os.path.join(al.folder, 'map')
     os.makedirs(mapdir, exist_ok=True)
     texts = {l: al.texts(l) for l in B.LANGS}
@@ -133,13 +134,13 @@ def main():
     stops = []
     for ch in al.chapters:
         pts = []
-        for n in [n for b in ch['blocks'] for n in B.blocks_photos(b)]:
-            g = al.gps[n] if n in al.gps else B.process(al.photo(n, B.FULL_SIZE))[1]['gps']
+        for n in ch['photos']:
+            g = al.gps[n] if n in al.gps else B.process(al.photo(n))[1]['gps']
             if g: pts.append(g)
         if not pts:
             print(f'  capitolo {ch["num"]}: nessuna foto con GPS, niente tappa sulla mappa'); continue
         la, lo = statistics.median(p[0] for p in pts), statistics.median(p[1] for p in pts)
-        name = main_t.get('map_names', {}).get(ch['num']) or main_t['chapters'][ch['num']]['title']
+        name = main_t.get('map_names', {}).get(ch['num']) or main_t['chapters'].get(ch['num'], {}).get('title', ch['dir'])
         stops.append([round(la, 4), round(lo, 4), name, '', ch['num'], 8, 10, 'start'])
     if not stops:
         sys.exit('Nessuna foto con GPS: non posso disegnare la mappa.')

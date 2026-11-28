@@ -3,6 +3,10 @@ __pycache__/
 *.tif
 *.tiff
 
-# foto originali: restano solo sul Mac. Sul sito vanno le copie leggere in photos/web/, generate dalla build
-*/photos/2880/
+# foto originali (le cartelle dei capitoli): restano solo sul Mac. Sul sito vanno le copie in photos/web/, generate dalla build
+*/photos/*/
+!*/photos/web/
 home/photos/*.jpg
+
+# cartella personale (libreria Foto e script): non fa parte del sito
+places/

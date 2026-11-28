@@ -4,14 +4,15 @@ Il codice non contiene testi né dati. Struttura (vedi common/README.md):
   index.html                     home nella lingua principale (deve stare qui: è la pagina d'ingresso del sito)
   home/en/index.html             home nelle altre lingue;  home/texts/<lingua>.json  i suoi testi
   <album>/index.html             album nella lingua principale;  <album>/en/index.html  nelle altre lingue
-  <album>/photos/2880/          foto originali (JPEG da 2880 px): l'unica cosa da esportare
+  <album>/photos/<n>-<nome>/    foto originali (JPEG da 2880 px), una cartella per capitolo: 1-grand-canyon, 2-…
   <album>/photos/web/           copie leggere in più misure, generate dalla build (common/code/images.py)
-  <album>/texts/<lingua>.json    testi dell'album;  <album>/structure.json  capitoli e impaginazione
+  <album>/texts/<lingua>.json    testi dell'album;  <album>/structure.json  copertina, anteprima e impaginazione (facoltativa)
   <album>/map/                   mappa (facoltativa): route.json, geodata.json, relief.png, elevation.png
   common/                        stile, script, config.json, testi comuni (texts/<lingua>.json) e questo codice (code/)
 
 Uso, dalla cartella principale del repository:  python3 common/code/build_site.py"""
-import hashlib, html, json, os, sys
+import hashlib, html, json, os, re, sys
+from urllib.parse import quote
 from concurrent.futures import ThreadPoolExecutor
 from PIL import Image, ImageOps
 
@@ -19,7 +20,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 COMMON = os.path.dirname(HERE)                 # cartella common/
 ROOT = os.path.dirname(COMMON)                 # cartella principale del repository
 OUT = os.environ.get('OUT', ROOT)              # dove scrivere le pagine (di default: il repository)
-FULL_SIZE = '2880'                             # sottocartella di <album>/photos con gli originali
+ALBUM_DIR = 'album'                            # cartella che contiene tutti gli album
+CHAPTER_DIR = re.compile(r'^(\d+)(?:[-_ ].*)?$')  # cartella di un capitolo: numero, poi un nome a piacere
 sys.path.insert(0, HERE)
 from route_map import RouteMap, arabic
 import images
@@ -35,6 +37,11 @@ MAIN = LANGS[0]
 UI = {l: read_json(COMMON, 'texts', f'{l}.json') for l in LANGS}                          # testi comuni
 HOME_UI = {l: {**UI[l], **read_json(ROOT, 'home', 'texts', f'{l}.json')} for l in LANGS}    # + testi della home
 esc = html.escape
+_said = set()
+def warn(msg):
+    """Avviso per chi pubblica: stampato una volta sola anche se la pagina è generata più volte."""
+    if msg not in _said:
+        _said.add(msg); print('ATTENZIONE: ' + msg)
 
 
 # ---------- album ----------
@@ -45,32 +52,100 @@ def blocks_photos(b):
     if b[0] == 'offset': return [b[1], b[2]]
     raise ValueError(b[0])
 
+def auto_layout(names, ratio):
+    """Impaginazione automatica di una serie di foto in ordine di scatto, con un ritmo che alterna:
+    orizzontale a tutta larghezza, poi due orizzontali affiancate, poi di nuovo una grande;
+    due verticali vicine affiancate; una verticale sola accanto all'orizzontale vicina."""
+    blocks, i, pair = [], 0, False
+    wide = lambda n: ratio(n) >= 1
+    while i < len(names):
+        n = names[i]
+        nxt = names[i + 1] if i + 1 < len(names) else None
+        if wide(n):
+            if pair and nxt and wide(nxt) and (i + 2 >= len(names) or wide(names[i + 2])):
+                blocks.append(['group', [n, nxt]]); i += 2
+            else:
+                blocks.append(['wide', n]); i += 1
+            pair = not pair
+        elif nxt and not wide(nxt):
+            blocks.append(['group', [n, nxt]]); i += 2
+        elif nxt:
+            blocks.append(['offset', nxt, n, True]); i += 2      # verticale a sinistra: viene prima nel tempo
+        elif blocks and blocks[-1][0] == 'wide':
+            blocks.append(['offset', blocks.pop()[1], n, False]); i += 1
+        else:
+            blocks.append(['group', [n]]); i += 1
+    return blocks
+
 class Album:
-    """Un album: tutto sta nella sua cartella <slug>/ (struttura, testi, foto, mappa)."""
-    def __init__(self, slug):
-        self.slug = slug
+    """Un album: tutto sta nella sua cartella <slug>/ (struttura, testi, foto, mappa).
+
+    I capitoli sono le cartelle in <slug>/photos/ che iniziano con un numero (1-grand-canyon, 2-page, …):
+    il numero dà l'ordine e collega il capitolo ai suoi testi; dentro, le foto vanno in ordine di scatto.
+    L'impaginazione di un capitolo si può scrivere in structure.json ("layout"); se manca, la fa arrange()."""
+    def __init__(self, name):
+        # self.slug è il percorso dell'album nel sito (album/<nome>): cartella, indirizzo della pagina, foto
+        self.name = name.split('/')[-1]
+        self.slug = f'{ALBUM_DIR}/{self.name}'
+        slug = self.slug
         self.folder = os.path.join(ROOT, slug)
         st = read_json(self.folder, 'structure.json')
         self.info = st
-        self.chapters = st['chapters']
         self.notime = set(st.get('no_time', []))
         self.gps = {k: (tuple(v) if v else None) for k, v in st.get('gps', {}).items()}
-        self.names = [n for ch in self.chapters for b in ch['blocks'] for n in blocks_photos(b)]
+        pdir = os.path.join(self.folder, 'photos')
+        self.where, self.chapters = {}, []
+        found = sorted((int(m.group(1)), d) for d in os.listdir(pdir)
+                       if os.path.isdir(os.path.join(pdir, d)) and (m := CHAPTER_DIR.match(d)))
+        nums = [n for n, _ in found]
+        assert len(nums) == len(set(nums)), f'{slug}/photos: due cartelle con lo stesso numero di capitolo: {found}'
+        for d in sorted(os.listdir(pdir)):
+            if os.path.isdir(os.path.join(pdir, d)) and d != 'web' and not CHAPTER_DIR.match(d):
+                warn(f'{slug}/photos/{d} non inizia con un numero: non è un capitolo, le sue foto non compaiono')
+        for n, d in found:
+            files = sorted(os.listdir(os.path.join(pdir, d)))
+            for f in files:
+                stem, ext = os.path.splitext(f)
+                if ext.lower() in ('.jpeg', '.png', '.tif', '.tiff', '.heic') or ext == '.JPG':
+                    warn(f'{slug}/photos/{d}/{f} ignorata: servono JPEG con estensione .jpg')
+                if ext != '.jpg':
+                    continue
+                assert stem not in self.where, f'{slug}: la foto {stem} è in due capitoli ({self.where.get(stem)} e {d})'
+                self.where[stem] = d
+            self.chapters.append({'num': str(n), 'dir': d, 'photos': [f[:-4] for f in files if f.endswith('.jpg')],
+                                  'blocks': st.get('layout', {}).get(str(n))})
+        self.names = list(self.where)          # tutte le foto; arrange() le mette nell'ordine della pagina
         mapdir = os.path.join(self.folder, 'map')
         self.map = RouteMap(mapdir) if os.path.exists(os.path.join(mapdir, 'route.json')) else None
         self.check()
 
-    def photo(self, name, size=FULL_SIZE):
-        """Percorso della foto, relativo alla radice del sito."""
-        return f'{self.slug}/photos/{size}/{name}.jpg'
+    def photo(self, name):
+        """Percorso dell'originale, relativo alla radice del sito."""
+        return f'{self.slug}/photos/{self.where[name]}/{name}.jpg'
 
     def check(self):
-        assert len(self.names) == len(set(self.names)), f'{self.slug}: foto duplicate'
-        for size in (FULL_SIZE,):
-            missing = [n for n in self.names + [self.info['hero'], self.info.get('preview', self.info['hero'])] if not os.path.exists(os.path.join(ROOT, self.photo(n, size)))]
-            assert not missing, f'Mancano in {self.slug}/photos/{size}: {missing}'
-        folder = os.path.join(ROOT, self.slug, 'photos', FULL_SIZE)
-        self.unused = sorted(set(os.path.splitext(f)[0] for f in os.listdir(folder) if f.endswith('.jpg')) - set(self.names) - {self.info['hero']})
+        assert self.chapters, f'{self.slug}/photos: nessuna cartella di capitolo (1-…, 2-…)'
+        for k in ('hero', 'preview'):
+            n = self.info.get(k, self.info['hero'])
+            assert n in self.where, f'{self.slug}/structure.json: la foto "{k}" ({n}) non è in nessuna cartella di capitolo'
+
+    def arrange(self, meta):
+        """Ordina le foto di ogni capitolo per ora di scatto e completa l'impaginazione.
+        Un capitolo senza "layout" in structure.json viene impaginato da solo; se il layout c'è ma nella cartella
+        ci sono foto in più, queste si aggiungono in fondo al capitolo (così una foto aggiunta compare sempre)."""
+        info = lambda n: meta[self.photo(n)]
+        when = lambda n: (info(n)['date'], info(n)['time'], n)
+        for ch in self.chapters:
+            photos = sorted(ch['photos'], key=when)
+            given = ch['blocks'] or []
+            used = [n for b in given for n in blocks_photos(b)]
+            wrong = [n for n in used if self.where.get(n) != ch['dir']]
+            assert not wrong, f'{self.slug}/structure.json, capitolo {ch["num"]}: {wrong} non sono nella cartella {ch["dir"]}'
+            extra = [n for n in photos if n not in used]
+            if given and extra:
+                print(f'{self.slug}, capitolo {ch["num"]}: impaginate in automatico in fondo al capitolo: {", ".join(extra)}')
+            ch['blocks'] = given + auto_layout(extra, lambda n: info(n)['w'] / info(n)['h'])
+        self.names = [n for ch in self.chapters for b in ch['blocks'] for n in blocks_photos(b)]
 
     def texts(self, lang):
         """Testi dell'album nella lingua data. Se manca qualcosa, usa la lingua principale e lo segnala."""
@@ -87,18 +162,30 @@ class Album:
             t = {**main, **t, 'chapters': {**main['chapters'], **t.get('chapters', {})},
                  'captions': {**main['captions'], **t.get('captions', {})}}
         missing = [n for n in self.names if n not in t['captions']]
-        assert not missing, f'Didascalie mancanti in {self.slug}/texts/{MAIN}.json: {missing}'
+        if missing:
+            warn(f'didascalie da scrivere in {self.slug}/texts/{lang}.json: {", ".join(missing)}')
+        for ch in self.chapters:              # capitolo senza testi: titolo dal nome della cartella
+            if ch['num'] not in t['chapters']:
+                warn(f'capitolo {ch["num"]} senza testi in {self.slug}/texts/{lang}.json')
+                name = CHAPTER_DIR.sub(lambda m: ch['dir'][len(m.group(1)):], ch['dir']).strip('-_ ').replace('-', ' ')
+                t['chapters'][ch['num']] = {'title': name[:1].upper() + name[1:], 'date': '', 'intro': ''}
         return t
 
 
 # ---------- foto ----------
 def process(path):
-    """Legge dal file a piena risoluzione i dati di scatto, le dimensioni e la posizione GPS."""
+    """Legge dal file a piena risoluzione i dati di scatto, le dimensioni e la posizione GPS.
+    Se qualche dato manca (foto unite, scansioni, telefono…) mostra solo quelli che ci sono."""
     im = Image.open(os.path.join(ROOT, path))
     ex = im.getexif(); sub = ex.get_ifd(0x8769)
-    t = float(sub[33434]); sh = f'1/{round(1/t)} s' if t < 1 else f'{t:g} s'
+    parts = []
+    if 37386 in sub: parts.append(f'{float(sub[37386]):g} mm')
+    if 33437 in sub: parts.append(f'f/{float(sub[33437]):g}')
+    if 33434 in sub:
+        t = float(sub[33434]); parts.append(f'1/{round(1/t)} s' if t < 1 else f'{t:g} s')
+    if 34855 in sub: parts.append(f'ISO {sub[34855]}')
     info = dict(
-        exif=f'{float(sub[37386]):g} mm · f/{float(sub[33437]):g} · {sh} · ISO {sub[34855]}',
+        exif=' · '.join(parts),
         date=sub.get(36867, '')[:10], time=sub.get(36867, '')[11:16], lens=sub.get(42036), camera=ex.get(272, ''), gps=None)
     g = ex.get_ifd(0x8825)
     if g and 2 in g:
@@ -217,14 +304,18 @@ WEB = {}   # originale -> [(larghezza, copia)], riempito da build()
 MOBILE = '(max-width: 760px)'     # sotto questa larghezza le foto vanno una sotto l'altra (style.css)
 MAIN_W = 'min(1200px, 100vw)'     # larghezza della colonna principale
 
+def url(path):
+    """Percorso sicuro per l'HTML: spazi e caratteri speciali nei nomi dei file vengono codificati (in srcset uno spazio romperebbe tutto)."""
+    return quote(path)
+
 def pic(src, up, sizes):
     """Attributi src/srcset/sizes di un'immagine: il browser sceglie la copia più piccola che basta."""
     v = WEB[src]
     fallback = next((p for w, p in v if w >= 1600), v[-1][1])
-    return (f'src="{up}{fallback}" srcset="{", ".join(f"{up}{p} {w}w" for w, p in v)}" sizes="{sizes}"')
+    return (f'src="{up}{url(fallback)}" srcset="{", ".join(f"{up}{url(p)} {w}w" for w, p in v)}" sizes="{sizes}"')
 
 def largest(src, up):
-    return up + WEB[src][-1][1]
+    return up + url(WEB[src][-1][1])
 
 def cover_sizes(w, h):
     """Foto a tutto schermo ritagliata (object-fit: cover): se lo schermo è più stretto della foto, conta l'altezza."""
@@ -240,8 +331,8 @@ def render_album(al, lang, meta, ver):
 
     def fig(name, cls='', share=1.0):
         n[0] += 1
-        title, text = A['captions'][name]
-        m = meta[al.photo(name, FULL_SIZE)]
+        title, text = A['captions'].get(name, ['', ''])
+        m = meta[al.photo(name)]
         parts = []
         if m['date']:
             parts.append(f'<i>{fmt_date(m["date"], T)}</i>')
@@ -259,7 +350,7 @@ def render_album(al, lang, meta, ver):
         return (f'<figure class="fig {cls}" style="--r:{m["w"]/m["h"]:.4f}">\n'
                 f'  <button class="ph" type="button" aria-label="{T["open_full"]}: {esc(title)}">{img}</button>\n'
                 f'  <figcaption><span class="no">{n[0]:02d}</span><p class="cap"><strong>{esc(title)}</strong> {esc(text)}</p>'
-                f'<p class="meta">{where}<span class="cam">{" · ".join("<i>"+esc(x)+"</i>" for x in m["exif"].split(" · "))}</span></p></figcaption>\n</figure>')
+                f'<p class="meta">{where}<span class="cam">{" · ".join("<i>"+esc(x)+"</i>" for x in m["exif"].split(" · ") if x)}</span></p></figcaption>\n</figure>')
 
     def block(b):
         k = b[0]
@@ -298,11 +389,13 @@ def render_album(al, lang, meta, ver):
              f'<span class="chnav-n"><b>1</b> / {tot}</span><span class="chnav-t">{esc(first)}</span>'
              f'<svg class="chnav-i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 7.5 6 4l3.5 3.5"/></svg>'
              f'<svg class="chnav-ring" aria-hidden="true"><path/></svg></button></nav>\n') if tot > 1 else ''
-    shots = [meta[al.photo(x, FULL_SIZE)] for x in al.names]
+    shots = [meta[al.photo(x)] for x in al.names]
     hm = meta[al.photo(al.info['hero'])]
-    lens_order = list(CONFIG['lenses'])
-    lenses = sorted({s['lens'] for s in shots}, key=lambda l: lens_order.index(l) if l in lens_order else len(lens_order))
-    lens_html = '<br>'.join(CONFIG['lenses'].get(l, l) for l in lenses)
+    # obiettivi: il nome scritto dalla fotocamera diventa quello di config.json (più nomi possono indicare lo stesso obiettivo)
+    order = list(dict.fromkeys(CONFIG['lenses'].values()))
+    lenses = sorted({CONFIG['lenses'].get(s['lens'], s['lens']) for s in shots if s['lens']},
+                    key=lambda l: (order.index(l) if l in order else len(order), l))
+    lens_html = '<br>'.join(lenses)
     cameras = ', '.join(sorted({s['camera'] for s in shots if s['camera']}))
     map_html, map_row = '', ''
     if al.map:
@@ -366,7 +459,7 @@ def render_home(albums, lang, meta, ver):
     page = page_head(lang, f'{AUTHOR} · {T["home_title"]}', T['home_desc'].format(author=AUTHOR), HOME, up, ver, year) + gnav(lang, HOME, up) + f'''<main>
   <header class="cover">
     <picture>
-      <source media="(orientation: portrait)" srcset="{", ".join(f"{up}{p} {w}w" for w, p in WEB[cover["portrait"]])}" sizes="{cover_sizes(*cover_dims["portrait"])}">
+      <source media="(orientation: portrait)" srcset="{", ".join(f"{up}{url(p)} {w}w" for w, p in WEB[cover["portrait"]])}" sizes="{cover_sizes(*cover_dims["portrait"])}">
       <img {pic(cover["landscape"], up, cover_sizes(*cover_dims["landscape"]))} alt="{esc(T["home_alt"])}" fetchpriority="high">
     </picture>
     <div class="cover-text"><h1>{AUTHOR}</h1></div>
@@ -396,17 +489,19 @@ def write(path, text):
 
 def build():
     albums = [Album(slug) for slug in CONFIG['albums']]
-    paths = {al.photo(n, FULL_SIZE) for al in albums for n in al.names + [al.info['hero'], al.info.get('preview', al.info['hero'])]}
+    paths = {al.photo(n) for al in albums for n in al.names}
     WEB.update(images.build(list(paths) + list(CONFIG['home_cover'].values()), ROOT))
     with ThreadPoolExecutor(8) as ex:
         meta = dict(ex.map(process, sorted(paths)))
+    for al in albums:
+        al.arrange(meta)
     ver = hashlib.md5(b''.join(open(f'{COMMON}/{f}','rb').read() for f in ('style.css', 'album.js', 'site.js'))).hexdigest()[:8]
     for lang in LANGS:
         for al in albums:
             render_album(al, lang, meta, ver)
         render_home(albums, lang, meta, ver)
     for al in albums:
-        print(f'{al.slug}: {len(al.names)} foto, {len(al.chapters)} capitoli' + (f' · non usate: {al.unused}' if al.unused else ''))
+        print(f'{al.slug}: {len(al.names)} foto, {len(al.chapters)} capitoli')
     print('lingue:', ', '.join(LANGS))
 
 if __name__ == '__main__':

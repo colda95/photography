@@ -2,8 +2,8 @@
 Uso:  python3 common/code/relief.py <album> [file.tif]     es.  python3 common/code/relief.py usa-2026
       (senza file, usa il primo .tif nella cartella map/ dell'album)
 Serve:  pip3 install numpy pillow tifffile imagecodecs
-Il GeoTIFF deve coprire almeno l'area della mappa (area in <album>/map/route.json): se è più grande, viene ritagliato.
-Scrive <album>/map/relief.png e <album>/map/elevation.png."""
+Il GeoTIFF deve coprire almeno l'area della mappa (area in album/<album>/map/route.json): se è più grande, viene ritagliato.
+Scrive album/<album>/map/relief.png e <album>/map/elevation.png."""
 import math, os, sys
 import numpy as np, tifffile
 from PIL import Image
@@ -12,8 +12,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from route_map import RouteMap
 
-SLUG = sys.argv[1]
-DEST = os.path.join(os.path.dirname(os.path.dirname(HERE)), SLUG, 'map')
+SLUG = sys.argv[1].split('/')[-1]                     # nome dell'album (la cartella in album/)
+DEST = os.path.join(os.path.dirname(os.path.dirname(HERE)), 'album', SLUG, 'map')
 M = RouteMap(DEST)
 LON0, LON1, LAT0, LAT1, K, CL = M.m.LON0, M.m.LON1, M.m.LAT0, M.m.LAT1, M.m.K, M.CL
 TIF = sys.argv[2] if len(sys.argv) > 2 else os.path.join(DEST, sorted(f for f in os.listdir(DEST) if f.endswith('.tif'))[0])

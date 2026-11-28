@@ -1,0 +1,354 @@
+{
+ "title": "Casa mia",
+ "place": "Lazio, Italy",
+ "dates": "2022–2026",
+ "hero_alt": "The coastal lake at dusk, the mountains turning pink behind the trees",
+ "cover_alt": "Flamingos wading in a coastal lake",
+ "lede": "Home: the coast of southern Lazio, photographed over four years of afternoons. The Circeo promontory, the lakes behind the dunes, the sea at sunset and a village up in the hills.",
+ "meta_description": "The coast of southern Lazio over four years: the Circeo national park, its lakes and forest, the sea at sunset and the medieval village of Sermoneta.",
+ "footer_copy": [],
+ "chapters": {
+  "1": {
+   "title": "Circeo",
+   "date": "December 2022 – August 2026",
+   "intro": "A national park since 1934, and the place I keep coming back to: a limestone promontory rising from the sea, a forest that floods every spring, and coastal lakes where buffalo graze and flamingos spend the winter."
+  },
+  "2": {
+   "title": "My Rouen Cathedral",
+   "date": "April – December 2025",
+   "intro": "Monet painted the façade of Rouen Cathedral more than thirty times, at every hour and in every season. Mine is this view: the same lake, the same line of trees and the same mountains, seen again and again from the shore as the light keeps changing."
+  },
+  "3": {
+   "title": "The sea",
+   "date": "April 2025 – August 2026",
+   "intro": "Twenty kilometres of dunes and the same horizon, facing west. Every evening the sun drops into the sea, and on 12 August 2026 it went down already bitten by the moon."
+  },
+  "4": {
+   "title": "Sermoneta",
+   "date": "August 20, 2026",
+   "intro": "A medieval village on the first slopes of the Lepini mountains, looking down on the plain and the sea. One summer evening among narrow lanes, flowers on the windowsills and cats who own the place."
+  }
+ },
+ "captions": {
+  "20221228-3W9A0038": [
+   "Winter sunset.",
+   "From the promontory the sun sets behind a thin bank of cloud, low over the sea."
+  ],
+  "20221228-3W9A0044": [
+   "Mastic and berries.",
+   "The evergreen scrub of the promontory, berries ripening in midwinter."
+  ],
+  "20221228-3W9A0046-2": [
+   "Daytime moon.",
+   "A crescent moon in the blue, framed by two bare stalks."
+  ],
+  "20221228-3W9A0051": [
+   "Last sliver.",
+   "The sun touches the horizon, flattened by the thick air over the sea."
+  ],
+  "20221230-3W9A0128": [
+   "Mallard.",
+   "A drake on the bank of the lake, in full winter colours."
+  ],
+  "20221230-3W9A0130": [
+   "Pair.",
+   "The female follows a few strokes behind, two wakes on still water."
+  ],
+  "20250419-3W9A4402": [
+   "Reeds.",
+   "Last year's reed plumes catch the low April sun at the edge of the wood."
+  ],
+  "20250419-3W9A4403": [
+   "Grazing.",
+   "A water buffalo in the clearing, among fallen branches and new grass."
+  ],
+  "20250419-3W9A4431": [
+   "Mud bath.",
+   "A young buffalo looks up, the rest of the herd lying in the shade behind."
+  ],
+  "20250422-3W9A4455": [
+   "April.",
+   "Spring cloud on the mountains, the lake still and silver below."
+  ],
+  "20250422-3W9A4605": [
+   "Evening pasture.",
+   "Cattle graze the lakeshore meadows as the light turns gold."
+  ],
+  "20250423-3W9A4616-Enhanced-NR": [
+   "Buttercup.",
+   "A single yellow flower in the undergrowth of the promontory."
+  ],
+  "20250426-3W9A4833": [
+   "Green water.",
+   "In spring the hollows of the forest fill with water and a carpet of duckweed."
+  ],
+  "20250426-3W9A4836": [
+   "Flooded forest.",
+   "Oaks and ash standing in the water: these pools are what make this forest rare."
+  ],
+  "20250426-3W9A4846": [
+   "Still.",
+   "Fallen branches and reflections in one of the forest pools."
+  ],
+  "20250426-3W9A4871": [
+   "Moss.",
+   "A fallen trunk covered in moss, glowing in a patch of light."
+  ],
+  "20250426-3W9A4873-Enhanced-NR": [
+   "Undergrowth.",
+   "Young trees crowd the light between the old trunks."
+  ],
+  "20250426-3W9A4875": [
+   "Clearing.",
+   "A burst of fresh green where a tree has fallen and let the sun in."
+  ],
+  "20250426-3W9A4892-Enhanced-NR": [
+   "Fallow deer.",
+   "Two deer at the edge of the wood, almost invisible in the evening light."
+  ],
+  "20250816-3W9A5470": [
+   "Summer haze.",
+   "Buffalo in the distance, the sky orange with the heat of August."
+  ],
+  "20250816-3W9A5474": [
+   "Sundial.",
+   "An old stone dial in the park, the hours worn by weather."
+  ],
+  "20250816-3W9A5483": [
+   "Golden hour.",
+   "The old buildings on the lake shore reflected in the water."
+  ],
+  "20250816-3W9A5490": [
+   "Over the lake.",
+   "The sun goes down behind the dunes that separate the lake from the sea."
+  ],
+  "20250816-3W9A5491": [
+   "Double sun.",
+   "Through the branches of a tamarisk, the sun and its reflection in the lake."
+  ],
+  "20250816-3W9A5502": [
+   "Post.",
+   "A single post in the lake, the water rippled by the evening breeze."
+  ],
+  "20250816-3W9A5503": [
+   "Post, again.",
+   "The same post a minute later, with the far shore at the top of the frame."
+  ],
+  "20250816-3W9A5529": [
+   "Swan.",
+   "A mute swan glides past, its reflection trailing below."
+  ],
+  "20250816-3W9A5536": [
+   "Silhouettes.",
+   "Eucalyptus against a sky of smoke and gold."
+  ],
+  "20250816-3W9A5539": [
+   "Into the trees.",
+   "The sun sinks into the tree line beyond the farm."
+  ],
+  "20250816-3W9A5541": [
+   "Buffalo at sunset.",
+   "One last mouthful before dark, next to the old stalls."
+  ],
+  "20251114-3W9A5798": [
+   "November evening.",
+   "Cattle scattered across the meadow, the lake and the mountains behind."
+  ],
+  "20251114-3W9A5865": [
+   "Cloud on the mountains.",
+   "Autumn colours along the shore and low cloud on the peaks."
+  ],
+  "20251114-3W9A5883": [
+   "Blue hour.",
+   "The light goes, and the mountains turn violet."
+  ],
+  "20251115-3W9A5914_1": [
+   "Orb weaver.",
+   "A spider waits at the centre of its web, the forest a blur of blue and green behind."
+  ],
+  "20251115-3W9A5924_1": [
+   "Hornets.",
+   "Two hornets on the oak leaves of the forest floor."
+  ],
+  "20251115-3W9A5932_1": [
+   "Stag.",
+   "A deer among the trunks, watching me as carefully as I'm watching it."
+  ],
+  "20251228-3W9A5980": [
+   "Jetty.",
+   "A low wall runs along the lake to a single windswept tree."
+  ],
+  "20251228-3W9A6027": [
+   "Take-off.",
+   "A swan runs across the water to get airborne, another keeps its distance."
+  ],
+  "20251228-3W9A6033": [
+   "Cormorant.",
+   "Perched on a post, drying its wings in the winter sun."
+  ],
+  "20251228-3W9A6035": [
+   "December.",
+   "The whole view in the last light, the mountains already blue."
+  ],
+  "20251228-3W9A6040": [
+   "Alpenglow.",
+   "The mountains turn pink above the trees and the houses on the shore."
+  ],
+  "20251228-3W9A6065": [
+   "Pink water.",
+   "The sky's colour reflected in the shallows at dusk."
+  ],
+  "20251228-3W9A6085": [
+   "Two flamingos.",
+   "Flying home over the trees as the light fades."
+  ],
+  "20251228-3W9A6107": [
+   "Reflection.",
+   "A flamingo wades alone in a sheltered corner of the lake."
+  ],
+  "20251230-3W9A6112": [
+   "The flock.",
+   "Flamingos feeding in the shallows, heads down in the water."
+  ],
+  "20251230-3W9A6118": [
+   "Pink.",
+   "The colour comes from what they eat: tiny crustaceans filtered from the mud."
+  ],
+  "20251230-3W9A6129": [
+   "Pair.",
+   "Two flamingos at the edge of the reeds, the lake shining behind."
+  ],
+  "20251230-3W9A6140": [
+   "Mirror.",
+   "One flamingo, its neck curved, reflected in a still pool."
+  ],
+  "20251230-3W9A6147": [
+   "Alone.",
+   "A single flamingo at the water's edge, the far shore lit by the sun."
+  ],
+  "20251230-3W9A6210": [
+   "Wings open.",
+   "A young flamingo, still grey, spreads its wings over the shallows."
+  ],
+  "20260822-3W9A0569": [
+   "Waxing moon.",
+   "The moon rising over the promontory, between two out-of-focus branches."
+  ],
+  "20260822-3W9A0591": [
+   "From the woods.",
+   "The last sun through the holm oaks on the slopes of the Circeo."
+  ],
+  "20250422-3W9A4457": [
+   "Ice plant.",
+   "In April the dunes flower: the yellow-white heads of the ice plant open to the sun."
+  ],
+  "20250422-3W9A4489": [
+   "Magenta.",
+   "The same plant in its other colour, against the dark sand."
+  ],
+  "20250422-3W9A4578-Enhanced-NR": [
+   "Hourglass.",
+   "Sand pouring from a shell, the sea out of focus behind."
+  ],
+  "20250423-3W9A4806": [
+   "Rocks.",
+   "Evening sky over the rocks at the foot of the promontory."
+  ],
+  "20251114-3W9A5868": [
+   "Narrow gap.",
+   "The sun finds a crack between the clouds and the sea."
+  ],
+  "20251114-3W9A5870": [
+   "Storm light.",
+   "A dark sky breaks open just above the horizon."
+  ],
+  "20251228-3W9A6043": [
+   "Winter dunes.",
+   "The sun low over a calm sea, the dune scrub in the foreground."
+  ],
+  "20251228-3W9A6048": [
+   "Half sun.",
+   "At 400 mm the sun is a dome of fire sinking under the water."
+  ],
+  "20260101-3W9A6294": [
+   "New Year's Day.",
+   "The first sunset of the year, seen from the dunes."
+  ],
+  "20260101-3W9A6303": [
+   "The long beach.",
+   "The coastline curves away towards the Circeo, a silhouette on the horizon."
+  ],
+  "20260101-3W9A6336": [
+   "Shoreline.",
+   "The sun's reflection runs up the wet sand."
+  ],
+  "20260101-3W9A6340": [
+   "Waves.",
+   "Low light, a gentle swell and the last rays through the cloud."
+  ],
+  "20260101-3W9A6343": [
+   "Driftwood.",
+   "A piece of wood on the sand, washed in by the winter sea."
+  ],
+  "20260812-3W9A0198": [
+   "Before the eclipse.",
+   "A shaft of light through the clouds over the sea, minutes before sunset."
+  ],
+  "20260812-3W9A0229": [
+   "Swimmers.",
+   "Two people still in the water, watching the sky."
+  ],
+  "20260812-3W9A0283": [
+   "Eclipse.",
+   "The sun setting already partly covered by the moon: the eclipse of 12 August 2026, seen from the coast."
+  ],
+  "20260812-3W9A0306m2": [
+   "Crescent sun.",
+   "The sun has become a sickle, low over the water."
+  ],
+  "20260812-3W9A0342": [
+   "Horns.",
+   "The eclipsed sun touches the horizon with its two points upwards."
+  ],
+  "20260812-3W9A0356": [
+   "Gone.",
+   "The last sliver of the crescent sinks into the sea."
+  ],
+  "20260812-take-1": [
+   "Milky Way.",
+   "The same night, with no moon in the sky, the Milky Way over the coast."
+  ],
+  "20260820-3W9A0448": [
+   "Geraniums.",
+   "Red flowers in a narrow lane between stone houses."
+  ],
+  "20260820-3W9A0450": [
+   "Waiting.",
+   "A ginger cat sits at a door, looking through the iron grille."
+  ],
+  "20260820-3W9A0460": [
+   "On the wall.",
+   "A calico cat stretched out on the warm stone."
+  ],
+  "20260820-3W9A0531": [
+   "Lamp posts.",
+   "Old street lamps against the orange evening sky."
+  ],
+  "20260820-3W9A0536": [
+   "Steps.",
+   "A lane climbs in steps between ivy-covered walls."
+  ],
+  "20260820-3W9A0537": [
+   "Balcony.",
+   "A small iron balcony full of plants on a weathered façade."
+  ],
+  "20260820-3W9A0538": [
+   "Evening chat.",
+   "A woman sits outside her door, as people do here when the heat breaks."
+  ],
+  "20260820-3W9A0543": [
+   "Guardian.",
+   "A black-and-white cat lying on a wall, eyes half open, letting me pass."
+  ]
+ }
+}

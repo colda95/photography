@@ -1,9 +1,9 @@
-"""Rilegge i testi dalla pagina pubblicata di un album e li salva in <album>/texts/<lingua>.json.
+"""Rilegge i testi dalla pagina pubblicata di un album e li salva in album/<album>/texts/<lingua>.json.
 Serve solo se hai corretto dei testi direttamente nell'HTML: lancialo PRIMA di build_site.py,
 così la rigenerazione non perde le correzioni.
 
-Uso:  python3 common/code/import_texts.py usa-2026        (lingua principale: usa-2026/index.html)
-      python3 common/code/import_texts.py usa-2026 en     (inglese: usa-2026/en/index.html)
+Uso:  python3 common/code/import_texts.py usa-2026        (lingua principale: album/usa-2026/index.html)
+      python3 common/code/import_texts.py usa-2026 en     (inglese: album/usa-2026/en/index.html)
 
 Importa titolo, sommario, descrizione, titoli e introduzioni dei capitoli, didascalie e note in fondo.
 I testi comuni (menu, pulsanti, colophon) vanno corretti in common/texts/<lingua>.json."""
@@ -13,9 +13,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 COMMON = os.path.dirname(HERE)
 ROOT = os.path.dirname(COMMON)
 CONFIG = json.load(open(os.path.join(COMMON, 'config.json'), encoding='utf-8'))
-SLUG = sys.argv[1]
+NAME = sys.argv[1].split('/')[-1]                     # nome dell'album (la cartella in album/)
+SLUG = f'album/{NAME}'
 LANG = sys.argv[2] if len(sys.argv) > 2 else CONFIG['languages'][0]
-assert SLUG in CONFIG['albums'], f'Album sconosciuto: {SLUG}'
+assert NAME in CONFIG['albums'], f'Album sconosciuto: {NAME}'
 assert LANG in CONFIG['languages'], f'Lingua sconosciuta: {LANG}'
 PAGE = os.path.join(ROOT, SLUG, *([] if LANG == CONFIG['languages'][0] else [LANG]), 'index.html')
 T = os.path.join(ROOT, SLUG, 'texts', f'{LANG}.json')
@@ -28,9 +29,8 @@ for fig in re.findall(r'<figure class="fig.*?</figure>', s, re.S):
     name = re.search(r'/([^/"]+)\.jpg"', fig).group(1)
     c = re.search(r'<p class="cap"><strong>(.*?)</strong>\s?(.*?)</p>', fig, re.S)
     j['captions'][name] = [u(c.group(1)), u(c.group(2))]
-order = [c['num'] for c in json.load(open(os.path.join(ROOT, SLUG, 'structure.json'), encoding='utf-8'))['chapters']]
 for k, sec in re.findall(r'<section class="ch" id="chapter-(\d+)">(.*?)</section>', s, re.S):
-    ch = j['chapters'].setdefault(order[int(k) - 1], {})
+    ch = j['chapters'].setdefault(k, {})              # i capitoli hanno lo stesso numero della loro cartella
     ch['title'] = u(re.search(r'<h2>(.*?)</h2>', sec, re.S).group(1))
     ch['intro'] = u(re.search(r'<p class="intro">(.*?)</p>', sec, re.S).group(1))
 j['title'] = u(re.search(r'<header class="cover">.*?<h1>(.*?)</h1>', s, re.S).group(1))
